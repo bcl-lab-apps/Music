@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GeneMusic</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="toggleoff">Off</string>
+    <string name="toggleon">On</string>
+    <string name="Timer">0s</string>
+    <string name="play">Play</string>
+    <string name="Pause">Pause</string>
+    <string name="Stop">Stop</string>
+    <string name="Volume">Volume</string>
+    <string name="APIError">Oops, Something went wrong in the login process!</string>
+    <string name="title_activity_error">ErrorActivity</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
+    <string name="risk_score">Average Risk</string>
+    <string name="ind_risk_score">Your Risk</string>
+
+</resources>
