@@ -12,7 +12,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -60,7 +62,7 @@ public class MainActivity extends Activity {
 	List<String> diseases= new ArrayList<String>();
 	List<Double> population_risk= new ArrayList<Double>();
 	List<Double> individual_risk =  new ArrayList<Double>();
-	double[] riskscores={1.48,1.29,1.49,1.25,1.42,
+	double[] riskscores={1.0,1.48,1.29,1.49,1.25,1.42,
 			1.57,1.80,0.72,0.75,0.79,0.11,0.58,0.66,
 			0.89,1.07,0.85,1.04,0.87,0.82,0.88,0.86,1.04,
 			1.10,1.15,1.17,0.94,0.8,1,1};
@@ -75,6 +77,7 @@ public class MainActivity extends Activity {
     boolean isPlaying=false;
     double sliderval;
     int changeFrequency;
+    int bar_length;
     int risk_index=0;
     int height = LayoutParams.WRAP_CONTENT;
     SeekBar fSlider;
@@ -87,11 +90,16 @@ public class MainActivity extends Activity {
     ImageButton connectButton;
     LinearLayout average_risk_bar;
     TextView individual_risk_bar;   
+    RelativeLayout.LayoutParams risk_bar_params;
+    TextView viewinterval;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Bundle extras = getIntent().getExtras();
+        viewinterval=(TextView) findViewById(R.id.textView2);     
+        viewinterval.setText("");
         if(extras != null){
         	Log.d("RISKS", "risk is not NULL");
             indriskHash= (HashMap) extras.get("risk_pairs");
@@ -113,26 +121,48 @@ public class MainActivity extends Activity {
         }
         else{
         	Log.d("RISKS", "received no data");
-        }        
+        } 
         //set the risk bars invisible
         average_risk_bar=(LinearLayout) findViewById(R.id.linearLayout1);
         average_risk_bar.setVisibility(View.INVISIBLE);
         individual_risk_bar=(TextView) findViewById(R.id.textView1);
         individual_risk_bar.setVisibility(View.INVISIBLE);
-        
+        if(new File("/mnt/sdcard/geneMusic.mid").exists() ){
+        	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        	    @Override
+        	    public void onClick(DialogInterface dialog, int which) {
+        	        switch (which){
+        	        case DialogInterface.BUTTON_POSITIVE:
+        	        	if(riskscores.length !=0){
+        	            	viewinterval.setText("generating audio");
+        	            	new MIDISequence().execute();        	
+        	            }
+        	            break;
+
+        	        case DialogInterface.BUTTON_NEGATIVE:
+        	        	runOnExecute();
+        	            break;
+        	        }
+        	    }
+        	};
+        	
+        	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        	builder.setMessage("Do you want to generate a new music file?").setPositiveButton("Yes", dialogClickListener)
+        	    .setNegativeButton("play the current one", dialogClickListener).show();
+        }
+               
         rn = new Random();
         fSlider = (SeekBar) findViewById(R.id.frequency);        
         fSlider.setProgress(0);
         vSlider= (SeekBar) findViewById(R.id.seekBar2);
         vSlider.setMax(10);
         vSlider.setProgress(0);
-        TextView viewinterval=(TextView) findViewById(R.id.textView2);     
-        viewinterval.setText("");
         startStopButton=(ImageButton) findViewById(R.id.imageButton2);
         View activity= this.findViewById(R.id.playerActivity); 
         stopButton=(ImageButton) findViewById(R.id.imageButton1);
         RelativeLayout.LayoutParams params= new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(VISUALIZER_HEIGHT_DIP * getResources().getDisplayMetrics().density));
-        params.addRule(RelativeLayout.BELOW, R.id.seekBar2);
+        params.addRule(RelativeLayout.ABOVE, R.id.linearLayout1);
+        //RelativeLayout.LayoutParams risk_bar_params= new RelativeLayout.LayoutParams(source)
         mVisualizerView = new VisualizerView(this);
         mVisualizerView.setLayoutParams(params);
         ((ViewGroup) activity).addView(mVisualizerView);
@@ -146,10 +176,6 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			}        	
         });
-        if(riskscores.length !=0){
-        	viewinterval.setText("generating audio");
-        	new MIDISequence().execute();        	
-        }
    };
            
     @Override
@@ -363,7 +389,10 @@ public class MainActivity extends Activity {
 				@Override
 				protected void onPostExecute(String result) {
 					average_risk_bar.setVisibility(View.VISIBLE);
-					individual_risk_bar.setLayoutParams(new LayoutParams((int) Math.floor(350*riskscores[0]),height));
+					bar_length=average_risk_bar.getWidth();
+					Log.d("Benmark length", String.valueOf(bar_length));
+					risk_bar_params=new RelativeLayout.LayoutParams((int) Math.floor(bar_length*riskscores[0]),height);
+					individual_risk_bar.setLayoutParams(risk_bar_params);
 					individual_risk_bar.setText("Your Risk: " + String.valueOf(riskscores[risk_index]));
 					individual_risk_bar.setVisibility(View.VISIBLE);
 					if(riskscores[risk_index]<1){
@@ -409,7 +438,6 @@ public class MainActivity extends Activity {
 			mVisualizer.setEnabled(true);
 			if(mediaPlayer.isPlaying()){
 				Log.d("Audio", "MediaPlayer audio session ID: " + mediaPlayer.getAudioSessionId());
-				isPlaying=true;
 				try {
 					currentPosition = mediaPlayer
 							.getCurrentPosition();
@@ -418,28 +446,30 @@ public class MainActivity extends Activity {
 					String timeS=Integer.toString(time);
 					timer.setText(timeS+"s");					
 					fSlider.setProgress(currentPosition);
-					Log.d("Current Risk Score", String.valueOf(riskscores[risk_index]));
-					if(currentPosition%changeFrequency<300){
-						risk_index++;
-						individual_risk_bar.setLayoutParams(new LayoutParams((int) Math.floor(350*riskscores[risk_index]),height));
-						individual_risk_bar.setText("Your Risk: " + String.valueOf(riskscores[risk_index]));
-						//unfortunately, a switch statement can be only done on integers...
-						if(riskscores[risk_index]<1){
-							individual_risk_bar.setBackgroundResource(R.drawable.risk_low);
-						}
-						else if(riskscores[risk_index]>1 && riskscores[risk_index]<1.2){
-							individual_risk_bar.setBackgroundResource(R.drawable.risk_elevated);
-						}
-						else if(riskscores[risk_index]>1.2){
-							individual_risk_bar.setBackgroundResource(R.drawable.risk_high);
-						}
+					risk_index=(int) currentPosition/changeFrequency;
+					Log.d("Index Number", String.valueOf(risk_index));
+					individual_risk_bar.setWidth((int) Math.floor(bar_length*riskscores[risk_index]));
+					individual_risk_bar.setLayoutParams(risk_bar_params);individual_risk_bar.setText("Your Risk: " + String.valueOf(riskscores[risk_index]));
+					//unfortunately, a switch statement can be only done on integers...
+					if(riskscores[risk_index]<1){
+						individual_risk_bar.setBackgroundResource(R.drawable.risk_low);
 					}
+					else if(riskscores[risk_index]>1 && riskscores[risk_index]<1.2){
+						individual_risk_bar.setBackgroundResource(R.drawable.risk_elevated);
+					}
+					else if(riskscores[risk_index]>1.2){
+						individual_risk_bar.setBackgroundResource(R.drawable.risk_high);
+					}
+
+				
 				}  catch (Exception e) {
 					
 				}
 				mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 		            public void onCompletion(MediaPlayer mediaPlayer) {
 		                mVisualizer.setEnabled(false);
+		                Intent sharingIntent= new Intent(getApplicationContext(), SharingAcitivity.class);
+		                startActivity(sharingIntent);
 		            }
 		        });
 				vSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
