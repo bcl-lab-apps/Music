@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.WRITE_SMS" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -37,6 +37,18 @@
         <activity
             android:name="com.example.music23andme.WebViewActivity"
             android:label="@string/title_activity_web_view" >
+        </activity>
+        <activity
+            android:name="com.example.music23andme.Sharing"
+            android:label="@string/title_activity_sharing" >
+        </activity>
+        <activity
+            android:name="com.example.music23andme.SharingAcitivity"
+            android:label="@string/title_activity_sharing_acitivity" >
+        </activity>
+        <activity
+            android:name="com.example.music23andme.ExportActivity"
+            android:label="@string/title_activity_export" >
         </activity>
     </application>
 
