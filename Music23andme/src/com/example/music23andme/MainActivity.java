@@ -2,7 +2,9 @@ package com.example.music23andme;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -28,6 +30,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,6 +44,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.media.audiofx.Visualizer;
 import android.media.AudioManager;
 
@@ -62,10 +66,14 @@ public class MainActivity extends Activity {
 	List<String> diseases= new ArrayList<String>();
 	List<Double> population_risk= new ArrayList<Double>();
 	List<Double> individual_risk =  new ArrayList<Double>();
+	/**
 	double[] riskscores={1.0,1.48,1.29,1.49,1.25,1.42,
 			1.57,1.80,0.72,0.75,0.79,0.11,0.58,0.66,
 			0.89,1.07,0.85,1.04,0.87,0.82,0.88,0.86,1.04,
 			1.10,1.15,1.17,0.94,0.8,1,1};
+	**/
+	List<Double> scoresList;
+	double[] riskscores;
 	static int[] conintervals={2,4,5,7,9,11,12};
 	static int[] disintervals={1,6,11};
 	int pitch=60;
@@ -79,6 +87,8 @@ public class MainActivity extends Activity {
     int changeFrequency;
     int bar_length;
     int risk_index=0;
+    static int NaNCount;
+    int index=0;
     int height = LayoutParams.WRAP_CONTENT;
     SeekBar fSlider;
     MediaPlayer mediaPlayer=new MediaPlayer();
@@ -88,7 +98,7 @@ public class MainActivity extends Activity {
     VisualizerView mVisualizerView;
     private Visualizer mVisualizer;
     ImageButton connectButton;
-    LinearLayout average_risk_bar;
+    TextView average_risk_bar;
     TextView individual_risk_bar;   
     RelativeLayout.LayoutParams risk_bar_params;
     TextView viewinterval;
@@ -100,12 +110,16 @@ public class MainActivity extends Activity {
         Bundle extras = getIntent().getExtras();
         viewinterval=(TextView) findViewById(R.id.textView2);     
         viewinterval.setText("");
+        //data parsing
         if(extras != null){
         	Log.d("RISKS", "risk is not NULL");
-            indriskHash= (HashMap) extras.get("risk_pairs");
+        	scoresList=new ArrayList<Double>();
+            indriskHash= (HashMap) extras.get("individual risk");
         	popriskHash=(HashMap) extras.get("population_risk");
         	pop_string.addAll(popriskHash.values());
         	ind_string.addAll(indriskHash.values());
+        	diseases.addAll(popriskHash.keySet());
+
         	for(String pop_risk:pop_string){
         		population_risk.add(Double.valueOf(pop_risk));
         		Log.d("RISKS", pop_risk);
@@ -116,31 +130,51 @@ public class MainActivity extends Activity {
         		Log.d("RISKS", ind_risk);
         	}
         	for(int e=0;e<individual_risk.size();e++){
-        		Log.d("Individual risks", String.valueOf(individual_risk.get(e)));
+        		scoresList.add(round(individual_risk.get(e)/population_risk.get(e),2));
+        		/**
+        		Log.d("Disease", diseases.get(e));
+        		Log.d("RISK Score", String.valueOf(individual_risk.get(e)));
+        		Log.d("RISK Score", String.valueOf(population_risk.get(e)));
+        		**/
+        		Log.d("RISK Score", String.valueOf(round(individual_risk.get(e)/population_risk.get(e),2)));
         	}
+        	riskscores=new double[scoresList.size()-NaNCount];
+        	for(int r=0;r<scoresList.size();r++){
+        		if(scoresList.get(r)!=0.0){
+        			
+        			riskscores[index]=scoresList.get(r);
+        			index++;       			
+        		}
+        	}
+        	Log.d("RISK Score", Arrays.toString(riskscores));
         }
         else{
         	Log.d("RISKS", "received no data");
         } 
-        //set the risk bars invisible
-        average_risk_bar=(LinearLayout) findViewById(R.id.linearLayout1);
-        average_risk_bar.setVisibility(View.INVISIBLE);
-        individual_risk_bar=(TextView) findViewById(R.id.textView1);
-        individual_risk_bar.setVisibility(View.INVISIBLE);
         if(new File("/mnt/sdcard/geneMusic.mid").exists() ){
         	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
         	    @Override
         	    public void onClick(DialogInterface dialog, int which) {
         	        switch (which){
         	        case DialogInterface.BUTTON_POSITIVE:
-        	        	if(riskscores.length !=0){
+        	        	if(riskscores !=null){
         	            	viewinterval.setText("generating audio");
         	            	new MIDISequence().execute();        	
         	            }
+        	        	else{
+        	        		Toast toast=Toast.makeText(getApplicationContext(), "Login with 23andme first", Toast.LENGTH_LONG);
+        	        		toast.setGravity(Gravity.CENTER, 50, 50);
+        	        		toast.show();
+        	        	}      	      
         	            break;
 
         	        case DialogInterface.BUTTON_NEGATIVE:
-        	        	runOnExecute();
+        	        	if(riskscores != null){       	        		
+        	        		runOnExecute();
+        	        	}
+        	        	else{
+        	        		Toast.makeText(getApplicationContext(), "Login with 23andme first", Toast.LENGTH_LONG).show();
+        	        	}
         	            break;
         	        }
         	    }
@@ -151,6 +185,11 @@ public class MainActivity extends Activity {
         	    .setNegativeButton("play the current one", dialogClickListener).show();
         }
                
+        //set the risk bars invisible
+        average_risk_bar=(TextView) findViewById(R.id.textView3);
+        average_risk_bar.setVisibility(View.INVISIBLE);
+        individual_risk_bar=(TextView) findViewById(R.id.textView1);
+        //individual_risk_bar.setVisibility(View.INVISIBLE);
         rn = new Random();
         fSlider = (SeekBar) findViewById(R.id.frequency);        
         fSlider.setProgress(0);
@@ -161,7 +200,8 @@ public class MainActivity extends Activity {
         View activity= this.findViewById(R.id.playerActivity); 
         stopButton=(ImageButton) findViewById(R.id.imageButton1);
         RelativeLayout.LayoutParams params= new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(VISUALIZER_HEIGHT_DIP * getResources().getDisplayMetrics().density));
-        params.addRule(RelativeLayout.ABOVE, R.id.linearLayout1);
+        params.addRule(RelativeLayout.ABOVE, R.id.textView1);
+        params.setMargins(0, 0, 0, 0);
         //RelativeLayout.LayoutParams risk_bar_params= new RelativeLayout.LayoutParams(source)
         mVisualizerView = new VisualizerView(this);
         mVisualizerView.setLayoutParams(params);
@@ -379,6 +419,20 @@ public class MainActivity extends Activity {
 	 }
 	 
 	
+	 public static double round(double value, int places) {
+		 NaNCount=0;
+		 if (places < 0) throw new IllegalArgumentException();
+		 if(Double.isInfinite(value) || Double.isNaN(value)){
+			 NaNCount++;
+			 return 0.0;
+		 }
+		 else{
+			 BigDecimal bd = new BigDecimal(value);
+			 bd = bd.setScale(places, BigDecimal.ROUND_HALF_UP);
+			 return bd.doubleValue();		    	
+		 }
+	 }
+	 
 	 
 	 class progressTrack extends AsyncTask<String,Void,String>{		 
 				@Override
@@ -447,9 +501,10 @@ public class MainActivity extends Activity {
 					timer.setText(timeS+"s");					
 					fSlider.setProgress(currentPosition);
 					risk_index=(int) currentPosition/changeFrequency;
-					Log.d("Index Number", String.valueOf(risk_index));
 					individual_risk_bar.setWidth((int) Math.floor(bar_length*riskscores[risk_index]));
-					individual_risk_bar.setLayoutParams(risk_bar_params);individual_risk_bar.setText("Your Risk: " + String.valueOf(riskscores[risk_index]));
+					Log.d("length", String.valueOf((int) Math.floor(bar_length*riskscores[risk_index])));
+					//Log.d("Bar Length",String.valueOf(individual_risk_bar.getWidth()));
+					individual_risk_bar.setText("Your Risk: " + String.valueOf(riskscores[risk_index]));
 					//unfortunately, a switch statement can be only done on integers...
 					if(riskscores[risk_index]<1){
 						individual_risk_bar.setBackgroundResource(R.drawable.risk_low);
@@ -468,8 +523,8 @@ public class MainActivity extends Activity {
 				mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 		            public void onCompletion(MediaPlayer mediaPlayer) {
 		                mVisualizer.setEnabled(false);
-		                Intent sharingIntent= new Intent(getApplicationContext(), SharingAcitivity.class);
-		                startActivity(sharingIntent);
+		                Intent exportIntent= new Intent(getApplicationContext(), ExportActivity.class);
+		                startActivity(exportIntent);
 		            }
 		        });
 				vSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){

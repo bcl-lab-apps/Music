@@ -1,5 +1,10 @@
 package com.example.music23andme;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Arrays;
 
 import android.os.AsyncTask;
@@ -9,6 +14,7 @@ import android.view.Menu;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.app.Activity;
@@ -18,11 +24,23 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class ExportActivity extends Activity {
+	MediaPlayer mp;
+    TextView tv;
+    Visualizer mVisualizer;
+    int len; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_export);
+		File mididir=Environment.getExternalStorageDirectory();
+		File wavFile=new File(mididir.getAbsolutePath()+"/geneMusic.wav");
+		try {
+			FileOutputStream out = new FileOutputStream(wavFile);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -41,6 +59,13 @@ public class ExportActivity extends Activity {
 		}
 		
 	}
+	
+	private void PassData(byte[] data) {
+		InputStream byteArray = new ByteArrayInputStream(data);;
+		
+
+
+    }
 	
 	public void init_visualizer() {
         mVisualizer = new Visualizer(mp.getAudioSessionId());
