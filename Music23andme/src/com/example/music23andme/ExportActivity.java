@@ -10,6 +10,7 @@ import java.util.Arrays;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.Menu;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
@@ -28,11 +29,18 @@ public class ExportActivity extends Activity {
     TextView tv;
     Visualizer mVisualizer;
     int len; 
+    Button buttonExport;
+    Button buttonShare;
+    Button buttonSave;
+    double[] riskDouble;
+    String[] riskScores;
+	String[] diseases;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_export);
+		final Bundle extras = getIntent().getExtras();
 		File mididir=Environment.getExternalStorageDirectory();
 		File wavFile=new File(mididir.getAbsolutePath()+"/geneMusic.wav");
 		try {
@@ -41,6 +49,27 @@ public class ExportActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		buttonSave= (Button) findViewById(R.id.save);
+		buttonSave.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				riskDouble= (double[]) extras.get("risk_scores");
+				diseases= (String[]) extras.get("diseases");
+				for( int r=0; r<riskDouble.length;r++ ){
+						riskScores[r]=Double.toString(riskDouble[r]); 
+				}
+				String result_score = ("" + Arrays.asList(riskScores)).
+			             replaceAll("(^.|.$)", "  ").replace(", ", "  , " );
+				String result_diseases=("" + Arrays.asList(diseases)).
+			             replaceAll("(^.|.$)", "  ").replace(", ", "  , " );
+				Log.d("String Args",result_score);
+				Log.d("String Args",result_diseases);
+				new saveData().execute(result_score,result_diseases);
+			}
+			
+		});
+		
 	}
 
 	@Override
@@ -58,6 +87,22 @@ public class ExportActivity extends Activity {
 			return null;
 		}
 		
+	}
+	
+	class saveData extends AsyncTask<String, Void, String>{
+
+
+		@Override
+		protected String doInBackground(String... args) {
+			RiskData riskData= new RiskData(getApplicationContext());			
+			riskData.insert(args[0], args[1]);
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+		}
 	}
 	
 	private void PassData(byte[] data) {

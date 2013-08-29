@@ -74,6 +74,7 @@ public class MainActivity extends Activity {
 	**/
 	List<Double> scoresList;
 	double[] riskscores;
+	String[] diseasesArray;
 	static int[] conintervals={2,4,5,7,9,11,12};
 	static int[] disintervals={1,6,11};
 	int pitch=60;
@@ -458,6 +459,19 @@ public class MainActivity extends Activity {
 					else if(riskscores[risk_index]>1.2){
 						individual_risk_bar.setBackgroundResource(R.drawable.risk_high);
 					}
+					mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+			            public void onCompletion(MediaPlayer mediaPlayer) {
+			                mVisualizer.setEnabled(false);
+			                Intent exportIntent= new Intent(getApplicationContext(), ExportActivity.class);
+			                exportIntent.putExtra("risk_socres", riskscores);
+			                diseasesArray= new String[diseases.size()];
+			                for(int d=0; d<diseases.size();d++){
+			                	diseasesArray[d]= diseases.get(d);
+			                }			                
+			                exportIntent.putExtra("diseases", diseasesArray);
+			                startActivity(exportIntent);
+			            }
+			        });
 					ScheduledExecutorService myScheduledExecutorService = Executors.newScheduledThreadPool(1);
 					myScheduledExecutorService.scheduleWithFixedDelay(
 							 new Runnable(){
@@ -519,14 +533,7 @@ public class MainActivity extends Activity {
 				
 				}  catch (Exception e) {
 					
-				}
-				mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-		            public void onCompletion(MediaPlayer mediaPlayer) {
-		                mVisualizer.setEnabled(false);
-		                Intent exportIntent= new Intent(getApplicationContext(), ExportActivity.class);
-		                startActivity(exportIntent);
-		            }
-		        });
+				}				
 				vSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
 					
 					@Override
