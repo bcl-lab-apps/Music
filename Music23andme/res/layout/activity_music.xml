@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/playerActivity"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="#2C3539"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/frequency"
+        android:layout_alignRight="@+id/frequency"
+        android:text="MIDI Play Back"
+        android:textColor="#FF0000"
+        android:gravity="center"
+        android:textSize="20sp" />
+
+    <MediaController
+        android:id="@+id/mediaController1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/timer"
+        android:layout_below="@+id/timer" >
+    </MediaController>
+
+    <SeekBar
+        android:id="@+id/seekBar2"
+        android:layout_width="160sp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageButton2"
+        android:layout_alignRight="@+id/frequency"
+        android:layout_marginRight="17dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton1"
+        android:layout_width="50sp"
+        android:layout_height="50dip"
+        android:layout_alignBottom="@+id/imageButton2"
+        android:layout_toRightOf="@+id/imageButton2"
+        android:src="@android:drawable/alert_light_frame" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mediaController1"
+        android:layout_below="@+id/mediaController1"
+        android:src="@android:drawable/ic_media_play" />
+
+    <SeekBar
+        android:id="@+id/frequency"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView4"
+        android:progressDrawable="@drawable/progress" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="18dp"
+        android:text="TextView"
+        android:textColor="#FF0000" 
+        android:textSize="17sp"/>
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/frequency"
+        android:layout_below="@+id/frequency"
+        android:text="@string/Timer"
+        android:textColor="#FF0000" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:drawableLeft="@drawable/connectbutton"
+        android:text="@string/connect23andme"
+        android:textColor="#99FFFF"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="200sp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageButton2"
+        android:layout_centerVertical="true"
+        android:layout_below="@id/imageButton2"
+        android:layout_marginTop="15sp"
+        android:background="@drawable/gradient_rectangle"
+        android:text="@string/risk_score"
+        android:textColor="#99FFFF"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/messageSuffixTextView"
+        android:layout_width="200sp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_below="@+id/textView3"
+        android:layout_marginTop="23dp"
+        android:background="@drawable/risk_low"
+        android:text="@string/ind_risk_score"
+        android:textColor="#99FFFF"
+        android:textSize="25sp" />
+
+</RelativeLayout>
