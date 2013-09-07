@@ -10,6 +10,7 @@ import java.util.Arrays;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.media.MediaPlayer;
@@ -19,10 +20,15 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ExportActivity extends Activity {
 	MediaPlayer mp;
@@ -35,12 +41,30 @@ public class ExportActivity extends Activity {
     double[] riskDouble;
     String[] riskScores;
 	String[] diseases;
+	Bundle extras;
+	ProgressDialog dialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_export);
-		final Bundle extras = getIntent().getExtras();
+		extras = getIntent().getExtras();
+		OnClickListener shareact_listener = new OnClickListener(){
+			public void onClick(View v){
+				Intent intent1 = new Intent(ExportActivity.this, SharingActivity.class);
+				//intent1.putExtra("transfertext","Data from MainActivity");
+				startActivity(intent1);
+			}
+		};
+		buttonShare = (Button)findViewById(R.id.facebook);
+		buttonShare.setOnClickListener(shareact_listener);
+		if(extras != null){
+			Log.d("EXTRAS", "bundle is not null");
+			Log.d("EXTRAS", Arrays.toString((String[])extras.get("diseases")));
+		}
+		else{
+			Log.d("EXTRAS", "bundle is null");
+		}
 		File mididir=Environment.getExternalStorageDirectory();
 		File wavFile=new File(mididir.getAbsolutePath()+"/geneMusic.wav");
 		try {
@@ -50,12 +74,18 @@ public class ExportActivity extends Activity {
 			e.printStackTrace();
 		}
 		buttonSave= (Button) findViewById(R.id.save);
+		Log.d("risk scores", Arrays.toString((double[])extras.get("risk_scores")));
+		
 		buttonSave.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View arg0) {
+				Log.d("data storage", "onClicked");
 				riskDouble= (double[]) extras.get("risk_scores");
+				Log.d("risk scores", Arrays.toString((double[])extras.get("risk_scores")));
+				Log.d("risk scores array", Arrays.toString(riskDouble));
 				diseases= (String[]) extras.get("diseases");
+				riskScores=new String[riskDouble.length];
 				for( int r=0; r<riskDouble.length;r++ ){
 						riskScores[r]=Double.toString(riskDouble[r]); 
 				}
@@ -65,6 +95,7 @@ public class ExportActivity extends Activity {
 			             replaceAll("(^.|.$)", "  ").replace(", ", "  , " );
 				Log.d("String Args",result_score);
 				Log.d("String Args",result_diseases);
+				dialog= ProgressDialog.show(ExportActivity.this, "Saving Data", "Please wait...", true);
 				new saveData().execute(result_score,result_diseases);
 			}
 			
@@ -94,14 +125,18 @@ public class ExportActivity extends Activity {
 
 		@Override
 		protected String doInBackground(String... args) {
+			Log.d("data storage", "background thread started");
 			RiskData riskData= new RiskData(getApplicationContext());			
 			riskData.insert(args[0], args[1]);
+			dialog.dismiss();
 			return null;
 		}
 		
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
+			Toast toast=Toast.makeText(getApplicationContext(), "results saved", Toast.LENGTH_SHORT);
+			toast.show();
 		}
 	}
 	

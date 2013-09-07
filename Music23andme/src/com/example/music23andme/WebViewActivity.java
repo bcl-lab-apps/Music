@@ -38,7 +38,7 @@ import android.webkit.WebViewClient;
 public class WebViewActivity extends Activity {
 	private WebView gWebView;
 	//have to use google.com because Android becomes wierd when the redirect_uri is't a working one
-	final String REDIRECT_URI = "https://www.google.com";
+	final String REDIRECT_URI = "http://www.blankwebsite.com";
 	final String CLIENT_ID = "021772bf49aa3d0b7b5623fa926eab02";
 	final String CLIENT_SECRET = "7278d594495d28c17cc183ef3279be24";
 	final String SCOPE = "basic names genomes analyses";
@@ -150,8 +150,6 @@ public class WebViewActivity extends Activity {
 							Log.d("access_token","access token is null");
 						}
 						bearer_token=bearer_tokens.get(0);
-						Log.d("Risk List", String.valueOf(bearer_tokens.size()));
-						Log.d("access_token", bearer_token);
 						
 						HttpGet httpget = new HttpGet(
 								"https://api.23andme.com/1/names/");
@@ -217,7 +215,7 @@ public class WebViewActivity extends Activity {
 		protected void onPostExecute(String result) {		
 			super.onPostExecute(result);
 			Log.d("Post result", result);
-			Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+			Intent intent = new Intent(getApplicationContext(), MusicActivity.class);
 			intent.putExtra("population_risk", population_risk);
 			intent.putExtra("individual risk", individual_risk);
 			startActivity(intent);
