@@ -72,7 +72,7 @@
         android:layout_marginTop="18dp"
         android:text="TextView"
         android:textColor="#FF0000" 
-        android:textSize="17sp"/>
+        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/timer"

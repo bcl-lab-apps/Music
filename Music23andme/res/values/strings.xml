@@ -25,18 +25,12 @@
     <string name="savedata">Save Your Data</string>
     <string name="disease">"Now Playing: "</string>
     <string name="app_id">344947132306940</string>
-	<string name="post_button">Post</string>
-	<string name="message_edit_button">Say something about GeneMusic</string>
-	<string name="success">Success</string>
+    <string name="title_activity_welcome">GeneMusic</string>
+    <string name="connect23andme">Connect with 23andme</string>
+    <string name="demo">Play Demo DNA Data</string>
     <string name="successfully_posted">Successfully posted message</string>
     <string name="error">Error</string>
     <string name="cancelled">Cancelled</string>
     <string name="permission_not_granted">Unable to perform selected action because permissions were not granted.</string>
-    <string name="ok">OK</string>
-    <string name="message">%1$s %2$s</string>
-    <string name="message_suffix">- via GeneMusic</string>
-    <string name="title_activity_welcome">GeneMusic</string>
-    <string name="title_activity_sharing_activity">SharingAcitivity</string>
-    <string name="connect23andme">Connect with 23andme</string>
-
+	<string name="ok">OK</string>
 </resources>

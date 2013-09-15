@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -93,6 +94,7 @@ public class MusicActivity extends Activity {
     static int NaNCount;
     int index=0;
     int height = LayoutParams.WRAP_CONTENT;
+    boolean isDemo=false;
     SeekBar fSlider;
     MediaPlayer mediaPlayer=new MediaPlayer();
     ImageButton startStopButton;
@@ -106,6 +108,8 @@ public class MusicActivity extends Activity {
     RelativeLayout.LayoutParams risk_bar_params;
     TextView viewinterval;
     TextView diseaseView;
+    ProgressDialog dataDialog;
+    ProgressDialog musicDialog;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,7 +119,8 @@ public class MusicActivity extends Activity {
         viewinterval=(TextView) findViewById(R.id.textView2);     
         viewinterval.setText("");
         //data parsing
-        if(extras != null){
+        if(extras != null && extras.get("demo")==null){
+        	dataDialog= ProgressDialog.show(MusicActivity.this, "Parsing data", "Please wait...", true);
         	Log.d("RISKS", "risk is not NULL");
         	scoresList=new ArrayList<Double>();
             indriskHash= (HashMap) extras.get("individual risk");
@@ -148,12 +153,30 @@ public class MusicActivity extends Activity {
         		}
         	}
         	Log.d("RISK Score", Arrays.toString(riskscores));
+        	dataDialog.dismiss();
+        }
+        
+        else if(extras != null && extras.get("demo")!=null){
+        	Log.d("Demo", "Playing in demo mode");
+        	isDemo=true;
+        	double[] demoriskscores = {1.29  , 1.83  , 1.15  , 1.03  , 0.63  , 0.76  , 1.18  , 0.8  , 0.87  , 1.25  , 0.82  , 1.49  , 0.89  , 0.88  , 1.0  , 0.11  , 0.87  , 1.04  , 0.72  , 1.56  , 1.48  , 0.58  , 0.71  , 0.85  , 1.07  , 1.1  , 1.42  , 0.0  , 0.0  };
+        	riskscores=new double[demoriskscores.length];
+        	for(int s=0;s<demoriskscores.length;s++){
+        		riskscores[s]=demoriskscores[s];
+        	}
+        	String demodiseases = " Age-related Macular Degeneration  , Stomach Cancer (Gastric Cardia Adenocarcinoma)  , Crohn's Disease  , Breast Cancer  , Chronic Kidney Disease  , Primary Biliary Cirrhosis  , Melanoma  , Multiple Sclerosis  , Exfoliation Glaucoma  , Psoriasis  , Restless Legs Syndrome  , Lung Cancer  , Rheumatoid Arthritis  , Obesity  , Gallstones  , Bipolar Disorder  , Type 1 Diabetes  , Colorectal Cancer  , Venous Thromboembolism  , Type 2 Diabetes  , Esophageal Squamous Cell Carcinoma (ESCC)  , Lupus (Systemic Lupus Erythematosus)  , Prostate Cancer  , Celiac Disease  , Scleroderma (Limited Cutaneous Type)  , Atrial Fibrillation  , Coronary Heart Disease  , Parkinson's Disease  , Ulcerative Colitis  ";
+        	for(String d: demodiseases.split(",")){
+        		diseases.add(d);
+        	}
+        	musicDialog= ProgressDialog.show(MusicActivity.this, "Generating music", "Please wait...");
+        	new MIDISequence().execute();
         }
         else{
         	Log.d("RISKS", "received no data");
         } 
         diseaseView= (TextView) findViewById(R.id.textView4);
-        if(new File("/mnt/sdcard/geneMusic.mid").exists() ){
+        if(new File("/mnt/sdcard/geneMusic.mid").exists() && isDemo==false){
+        	Log.d("MIDI File", "file already exists");
         	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
         	    @Override
         	    public void onClick(DialogInterface dialog, int which) {
@@ -178,6 +201,7 @@ public class MusicActivity extends Activity {
         	        	}
         	        	if(riskscores !=null && riskscores.length>0){
         	            	viewinterval.setText("generating audio");
+        	            	musicDialog= ProgressDialog.show(MusicActivity.this, "Generating music", "Please wait...");
         	            	new MIDISequence().execute();        	
         	            }
         	        	else{
@@ -221,7 +245,8 @@ public class MusicActivity extends Activity {
         	builder.setMessage("Do you want to generate a new music file?").setPositiveButton("Yes", dialogClickListener)
         	    .setNegativeButton("play the current one", dialogClickListener).show();
         }
-        else if(riskscores != null){
+        else if(riskscores != null && isDemo==false){
+        	musicDialog= ProgressDialog.show(MusicActivity.this, "Generating music", "Please wait...");
         	new MIDISequence().execute();
         }
                
@@ -264,17 +289,6 @@ public class MusicActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-    
-    public void onDestroy(){
-          super.onDestroy();
-          isRunning = false;
-          try {
-            t.join();
-           } catch (InterruptedException e) {
-             e.printStackTrace();
-           }
-           t = null;
-     }
     
     @Override
 	protected void onPause() {
@@ -366,15 +380,23 @@ public class MusicActivity extends Activity {
 					tracks.add(pianoTrack3);
 					MidiFile midi = new MidiFile(MidiFile.DEFAULT_RESOLUTION, tracks);
 					File mididir=Environment.getExternalStorageDirectory();
-					File midiFile=new File(mididir.getAbsolutePath()+"/Music/geneMusic.mid");
+					File midiFile;
+					if(isDemo==false){
+						midiFile=new File(mididir.getAbsolutePath()+"/Music/geneMusic.mid");						
+					}
+					else{
+						midiFile=new File(mididir.getAbsolutePath()+"/Music/geneMusicDemo.mid");
+					}
 					midi.writeToFile(midiFile);
 					System.out.println("midi file generated");
 					if (midiFile.exists()){
 						Log.d("File path",midiFile.getAbsolutePath());
 					}
+					musicDialog.dismiss();
 				return "successfully generated MIDI";
 			} catch (Exception e) {
 				Log.d("Audio error", e.toString());
+				e.printStackTrace();
 				String lineNum=Integer.toString(getLineNumber());
 				return e.toString()+" "+lineNum;
 			}
@@ -400,7 +422,12 @@ public class MusicActivity extends Activity {
 	 void runOnExecute(){
 		 
 		 try {
-			mediaPlayer.setDataSource("/mnt/sdcard/Music/geneMusic.mid");
+			if(isDemo==false){
+				mediaPlayer.setDataSource("/mnt/sdcard/Music/geneMusic.mid");				
+			}
+			else{
+				mediaPlayer.setDataSource("/mnt/sdcard/Music/geneMusicDemo.mid");	
+			}
 			mediaPlayer.prepare();
 		    mVisualizer = new Visualizer(mediaPlayer.getAudioSessionId());
 		    mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);

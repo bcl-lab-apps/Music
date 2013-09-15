@@ -44,7 +44,7 @@
         </activity>
         <activity
             android:name="com.example.music23andme.SharingActivity"
-            android:label="@string/title_activity_sharing_activity" >
+            android:label="adfsd" >
         </activity>
         <activity
             android:name="com.example.music23andme.ExportActivity"

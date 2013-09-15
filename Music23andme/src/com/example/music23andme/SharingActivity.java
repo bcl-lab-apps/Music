@@ -196,7 +196,7 @@ public class SharingActivity extends FragmentActivity{
         String title = null;
         String alertMessage = null;
         if (error == null) {
-            title = getString(R.string.success);
+            //title = getString(R.string.success);
             String id = result.cast(GraphObjectWithId.class).getId();
             alertMessage = getString(R.string.successfully_posted, message, id);
         } else {
@@ -217,7 +217,7 @@ public class SharingActivity extends FragmentActivity{
 
     private void postStatusUpdate() {
         if (user != null && hasPublishPermission()) {
-            final String message = getString(R.string.message, messageET.getText().toString(), R.string.message_suffix);
+            final String message = getString(R.string.app_name, messageET.getText().toString(), R.string.APIError);
             Log.d("Facebook Message", message);
             Request request = Request
                     .newStatusUpdateRequest(Session.getActiveSession(), message, new Request.Callback() {

@@ -7,26 +7,23 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 
+import com.facebook.*;
+import com.facebook.widget.*;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
-import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
-import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,17 +40,33 @@ public class ExportActivity extends Activity {
 	String[] diseases;
 	Bundle extras;
 	ProgressDialog dialog;
+	
+	private UiLifecycleHelper uiHelper;
+	
+	private Session.StatusCallback callback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		uiHelper = new UiLifecycleHelper(this, callback);
+	    uiHelper.onCreate(savedInstanceState);
+	    
 		setContentView(R.layout.activity_export);
 		extras = getIntent().getExtras();
 		OnClickListener shareact_listener = new OnClickListener(){
 			public void onClick(View v){
-				Intent intent1 = new Intent(ExportActivity.this, SharingActivity.class);
-				//intent1.putExtra("transfertext","Data from MainActivity");
-				startActivity(intent1);
+				if (FacebookDialog.canPresentShareDialog(getApplicationContext(), 
+		                FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
+		    		FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(ExportActivity.this)
+		    		.setLink("https://developers.facebook.com/android")
+		    		.build();
+		    		uiHelper.trackPendingDialogCall(shareDialog.present());
+		    	}
 			}
 		};
 		buttonShare = (Button)findViewById(R.id.facebook);
@@ -102,7 +115,59 @@ public class ExportActivity extends Activity {
 		});
 		
 	}
+	
+    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+        if ((exception instanceof FacebookOperationCanceledException) ||
+                (exception instanceof FacebookAuthorizationException)) {
+                new AlertDialog.Builder(ExportActivity.this)
+                    .setTitle(R.string.cancelled)
+                    .setMessage(R.string.permission_not_granted)
+                    .setPositiveButton(R.string.ok, null)
+                    .show();
+        }
+    }
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    super.onActivityResult(requestCode, resultCode, data);
+
+	    uiHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {
+	        @Override
+	        public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
+	            Log.e("Activity", String.format("Error: %s", error.toString()));
+	        }
+
+	        @Override
+	        public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
+	            Log.i("Activity", "Success!");
+	        }
+	    });
+	}
+	
+	@Override
+	protected void onResume() {
+	    super.onResume();
+	    uiHelper.onResume();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+	    super.onSaveInstanceState(outState);
+	    uiHelper.onSaveInstanceState(outState);
+	}
+
+	@Override
+	public void onPause() {
+	    super.onPause();
+	    uiHelper.onPause();
+	}
+
+	@Override
+	public void onDestroy() {
+	    super.onDestroy();
+	    uiHelper.onDestroy();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

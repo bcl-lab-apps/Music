@@ -12,26 +12,41 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="84dp"
         android:text="Login 23andMe"
-        android:background="#CCFFCC" />
+        android:background="#0099CC" 
+        android:drawableLeft="@drawable/connectbutton"/>
 
     <Button
         android:id="@+id/button_loginfb"
-        android:layout_width="200dip"
+        android:layout_width="200sp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/button_music"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
         android:text="Share on Facebbok" 
-        android:background="#66FFCC"/>
+        android:background="#0099CC"
+        android:drawableLeft="@drawable/facebookicon"/>
 
     <Button
         android:id="@+id/button_music"
-        android:layout_width="200dip"
+        android:layout_width="200sp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/button_login23"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="45dp"
-        android:text="Play my music"
-        android:background="#CCFFCC" />
+        android:background="#0099CC"
+        android:text="Play my music" 
+        android:drawableLeft="@drawable/musicicon" />
+
+    <Button
+        android:id="@+id/playDemo"
+        android:layout_width="200sp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button_loginfb"
+        android:layout_below="@+id/button_loginfb"
+        android:layout_marginTop="36dp"
+        android:text="@string/demo"
+        android:background="#0099CC" 
+        android:drawableLeft="@drawable/musicicon" />
+
 
 </RelativeLayout>
