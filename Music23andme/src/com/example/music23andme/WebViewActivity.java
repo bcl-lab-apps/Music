@@ -26,6 +26,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -37,35 +39,44 @@ import android.webkit.WebViewClient;
  
 public class WebViewActivity extends Activity {
 	private WebView gWebView;
+	ProgressDialog pageDialog;
+	ProgressDialog dataDialog;
 	//have to use google.com because Android becomes wierd when the redirect_uri is't a working one
 	final String REDIRECT_URI = "http://www.blankwebsite.com";
 	final String CLIENT_ID = "021772bf49aa3d0b7b5623fa926eab02";
 	final String CLIENT_SECRET = "7278d594495d28c17cc183ef3279be24";
 	final String SCOPE = "basic names genomes analyses";
+	final String TAG= "WEBVIEW";
 	Hashtable<String, String> individual_risk=new Hashtable<String, String>();
 	Hashtable<String, String> population_risk=new Hashtable<String, String>();
 	
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 		setContentView(R.layout.webview);
 		
 		gWebView = (WebView) findViewById(R.id.webView1);
 
+		pageDialog=ProgressDialog.show(WebViewActivity.this, "", "connecting to 23andme,,,");
 		gWebView.loadUrl("https://api.23andme.com/authorize/?redirect_uri="
 				+ REDIRECT_URI + "&response_type=code&client_id=" + CLIENT_ID
 				+ "&scope=" + SCOPE);
 		
 		Log.d("WEBVIEW", "got to webpage");
-
 		gWebView.setWebViewClient(new WebViewClient() {
 
 			@Override
 			public void onPageFinished(WebView view, String url) {
 				super.onPageFinished(view, url);
 				Log.d("WEBVIEW", url);
+				if(url.startsWith("https://api.23andme")){
+					Log.d(TAG, "got to authentication page");
+					pageDialog.dismiss();
+				}
 				if (url.startsWith(REDIRECT_URI)) {
 					//Log.d("WEBVIEW", "onpagefinished is called");
 					System.out.println("got to override");
+					dataDialog=ProgressDialog.show(WebViewActivity.this, "retrieving data", "please wait...");
 					if (url.indexOf("code=") != -1) {
 						//if the query contains code
 						String queryString = null;
@@ -92,6 +103,11 @@ public class WebViewActivity extends Activity {
 		});
 		
 
+	}
+	@Override
+	protected void onPause() {
+		super.onPause();
+		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 	}
 	class PostRequest extends AsyncTask<String,Void,String>{
 		
@@ -215,11 +231,13 @@ public class WebViewActivity extends Activity {
 		protected void onPostExecute(String result) {		
 			super.onPostExecute(result);
 			Log.d("Post result", result);
+			dataDialog.dismiss();
 			Intent intent = new Intent(getApplicationContext(), MusicActivity.class);
 			intent.putExtra("population_risk", population_risk);
 			intent.putExtra("individual risk", individual_risk);
 			startActivity(intent);
 		}
+		
 		
 		
 	}

@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		uiHelper = new UiLifecycleHelper(this, callback);
 	    uiHelper.onCreate(savedInstanceState);
+	    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 		
 		login23_listener = new OnClickListener() {
 			public void onClick(View v) {
@@ -123,6 +124,7 @@ public class MainActivity extends Activity {
 	public void onPause() {
 	    super.onPause();
 	    uiHelper.onPause();
+	    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 	}
 
 	@Override
@@ -131,4 +133,4 @@ public class MainActivity extends Activity {
 	    uiHelper.onDestroy();
 	}
 	
-	}
+}

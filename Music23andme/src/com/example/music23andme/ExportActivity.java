@@ -54,6 +54,7 @@ public class ExportActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		uiHelper = new UiLifecycleHelper(this, callback);
+		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 	    uiHelper.onCreate(savedInstanceState);
 	    
 		setContentView(R.layout.activity_export);
@@ -160,6 +161,7 @@ public class ExportActivity extends Activity {
 	public void onPause() {
 	    super.onPause();
 	    uiHelper.onPause();
+	    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 	}
 
 	@Override

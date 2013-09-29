@@ -52,9 +52,11 @@ import android.media.AudioManager;
 
 import com.leff.midi.MidiFile;
 import com.leff.midi.MidiTrack;
+import com.leff.midi.event.MidiEvent;
 import com.leff.midi.event.NoteOff;
 import com.leff.midi.event.NoteOn;
 import com.leff.midi.event.PitchBend;
+import com.leff.midi.event.ProgramChange;
 import com.leff.midi.event.meta.Tempo;
 import com.leff.midi.event.meta.TimeSignature;
 
@@ -93,6 +95,7 @@ public class MusicActivity extends Activity {
     int risk_index=0;
     static int NaNCount;
     int index=0;
+    int time_duration;
     int height = LayoutParams.WRAP_CONTENT;
     boolean isDemo=false;
     SeekBar fSlider;
@@ -114,6 +117,7 @@ public class MusicActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
         setContentView(R.layout.activity_music);
         Bundle extras = getIntent().getExtras();
         viewinterval=(TextView) findViewById(R.id.textView2);     
@@ -154,6 +158,7 @@ public class MusicActivity extends Activity {
         	}
         	Log.d("RISK Score", Arrays.toString(riskscores));
         	dataDialog.dismiss();
+        	saveData();
         }
         
         else if(extras != null && extras.get("demo")!=null){
@@ -205,7 +210,7 @@ public class MusicActivity extends Activity {
         	            	new MIDISequence().execute();        	
         	            }
         	        	else{
-        	        		Toast toast=Toast.makeText(getApplicationContext(), "Login with 23andme first", Toast.LENGTH_LONG);
+        	        		Toast toast=Toast.makeText(getApplicationContext(), "Login with 23andme and save your data", Toast.LENGTH_LONG);
         	        		toast.show();
         	        	}      	      
         	            break;
@@ -234,7 +239,7 @@ public class MusicActivity extends Activity {
             	        	}
         	        	
         	        	else{
-        	        		Toast.makeText(getApplicationContext(), "Login with 23andme first", Toast.LENGTH_LONG).show();
+        	        		Toast.makeText(getApplicationContext(), "Login with 23andme and save your data", Toast.LENGTH_LONG).show();
         	        	}
         	            break;
         	        }
@@ -296,7 +301,22 @@ public class MusicActivity extends Activity {
 		if(mediaPlayer.isPlaying()){
 			mediaPlayer.pause();
 		}
+		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 	}
+    
+    void saveData(){
+    	double[] dbScores= new double[riskscores.length];
+    	for(int s=0;s<riskscores.length;s++){
+    		dbScores[s]=riskscores[s];
+    	}
+    	String result_score = ("" + Arrays.asList(dbScores)).
+	             replaceAll("(^.|.$)", "  ").replace(", ", "  , " );
+    	String result_diseases = ("" + diseases).
+	             replaceAll("(^.|.$)", "  ").replace(", ", "  , " );
+    	Log.d("db values", result_diseases);
+    	RiskData riskData= new RiskData(getApplicationContext());    	
+		riskData.insert(result_score,result_diseases);
+    }
 
 	class MIDISequence extends AsyncTask<String,Void,String>{
 
@@ -306,6 +326,9 @@ public class MusicActivity extends Activity {
 			MidiTrack pianoTrack = new MidiTrack();
 			MidiTrack pianoTrack2=new MidiTrack();
 			MidiTrack pianoTrack3=new MidiTrack();
+			MidiTrack bassTrack = new MidiTrack();
+			MidiEvent pcBass = new ProgramChange(0,0,44);
+			bassTrack.insertEvent(pcBass);
 			TextView viewinterval=(TextView) findViewById(R.id.textView2);
 			try {
 				 TimeSignature ts = new TimeSignature();
@@ -321,7 +344,7 @@ public class MusicActivity extends Activity {
 	             PitchBend bend;
 				 for (int x = 0; x < riskscores.length; x++) {
 					
-					if (riskscores[x] < 1) 
+					if (riskscores[x] < 1){
 						for(int i=0;i<5;i++){
 							if(pitch<48){
 								pitch=pitch+7;
@@ -334,17 +357,22 @@ public class MusicActivity extends Activity {
 							NoteOn on=new NoteOn(TickCount*480,channel,pitch,100);
 							NoteOn third=new NoteOn(TickCount*480,channel,pitch+4,100);
 							NoteOn fifth = new NoteOn(TickCount*480,channel,pitch+7,100);
-							NoteOff off=new NoteOff(TickCount*480+240,channel,pitch,0);
+							NoteOn bassOn = new NoteOn(TickCount*480,channel,pitch,100);
+							NoteOff off=new NoteOff(TickCount*480+480,channel,pitch,0);
 							NoteOff off2=new NoteOff(TickCount*480+240,channel,pitch+4,0);
 							NoteOff off3=new NoteOff(TickCount*480+240,channel,pitch+7,0);
+							NoteOff off4=new NoteOff(TickCount*480+480,channel,pitch+7,0);
 							pianoTrack.insertEvent(on);
 							pianoTrack2.insertEvent(third);
 							pianoTrack3.insertEvent(fifth);
 							pianoTrack.insertEvent(off);
 							pianoTrack2.insertEvent(off2);
 							pianoTrack3.insertEvent(off3);
+							bassTrack.insertEvent(bassOn);
+							bassTrack.insertEvent(off4);
 							TickCount++;
 						}
+					}
 					
 					 else {
 						for(int i=0;i<5;i++){
@@ -357,9 +385,11 @@ public class MusicActivity extends Activity {
 							}
 							pitch=AsOrDes(pitch,false,rn.nextInt(2),rn.nextInt(disintervals.length));
 							NoteOn on=new NoteOn(TickCount*480,channel,pitch,127);
-							NoteOff off=new NoteOff(TickCount*480+240,channel,pitch,0);
-							NoteOff off2=new NoteOff(TickCount*480+240,channel,pitch+2,0);
+							NoteOn bassOn = new NoteOn(TickCount*480,channel,pitch,100);
+							NoteOff off=new NoteOff(TickCount*480+480,channel,pitch,0);
+							NoteOff off2=new NoteOff(TickCount*480+480,channel,pitch+2,0);
 							NoteOff off3=new NoteOff(TickCount*480+240,channel,pitch+3,0);
+							NoteOff off4=new NoteOff(TickCount*480+240,channel,pitch+3,0);
 							NoteOn third=new NoteOn(TickCount*480,channel,pitch+2,50);
 							NoteOn fifth = new NoteOn(TickCount*480,channel,pitch+3,50);
 							pianoTrack.insertEvent(on);
@@ -368,6 +398,8 @@ public class MusicActivity extends Activity {
 							pianoTrack.insertEvent(off);
 							pianoTrack2.insertEvent(off2);
 							pianoTrack3.insertEvent(off3);
+							bassTrack.insertEvent(bassOn);
+							bassTrack.insertEvent(off4);
 							TickCount++;
 						}
 						
@@ -378,6 +410,7 @@ public class MusicActivity extends Activity {
 					tracks.add(pianoTrack);
 					tracks.add(pianoTrack2);
 					tracks.add(pianoTrack3);
+					tracks.add(bassTrack);
 					MidiFile midi = new MidiFile(MidiFile.DEFAULT_RESOLUTION, tracks);
 					File mididir=Environment.getExternalStorageDirectory();
 					File midiFile;
@@ -404,7 +437,7 @@ public class MusicActivity extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			Toast toast=Toast.makeText(getApplicationContext(), "Music Saved to your music tracks", Toast.LENGTH_SHORT);
+			Toast toast=Toast.makeText(getApplicationContext(), "Music Saved to your music tracks", Toast.LENGTH_LONG);
 			toast.setGravity(Gravity.CENTER, 0, 0);
 			toast.show();
 			TextView viewinterval=(TextView) findViewById(R.id.textView2);
@@ -574,12 +607,11 @@ public class MusicActivity extends Activity {
 					timer.setText(timeS+"s");					
 					fSlider.setProgress(currentPosition);
 					risk_index=(int) currentPosition/changeFrequency;
-					diseaseView.setText("Now Playing: "+ diseases.get((int) currentPosition/changeFrequency));
-					individual_risk_bar.setWidth((int) Math.floor(bar_length*riskscores[risk_index]));
+					diseaseView.setText("Now Evaluating: "+ diseases.get((int) currentPosition/changeFrequency));
+					individual_risk_bar.getLayoutParams().width=(int) (bar_length*riskscores[risk_index]);
 					Log.d("length", String.valueOf((int) Math.floor(bar_length*riskscores[risk_index])));
 					//Log.d("Bar Length",String.valueOf(individual_risk_bar.getWidth()));
 					individual_risk_bar.setText("Your Risk: " + String.valueOf(riskscores[risk_index]) + "x the average");
-					//unfortunately, a switch statement can be only done on integers...
 					if(riskscores[risk_index]<1){
 						individual_risk_bar.setBackgroundResource(R.drawable.risk_low);
 					}
