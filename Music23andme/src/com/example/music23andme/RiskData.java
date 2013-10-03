@@ -18,6 +18,7 @@ public class RiskData {
 	public final String C_CREATED_AT="created_at";
 	public final String C_SCORE= "risk_score";
 	public final String C_DISEASE= "diseases";
+	public final String C_AVERAGE= "average_risk";
 			
 	Context context;
 	DbHelper dbHelper;
@@ -28,12 +29,13 @@ public class RiskData {
 		dbHelper= new DbHelper();
 	}
 	
-	public void insert(String scores, String disease){
+	public void insert(String scores, String disease, String average){
 		db = dbHelper.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(C_CREATED_AT, new Date().getTime() );
 		values.put(C_SCORE, scores);
 		values.put(C_DISEASE, disease);
+		values.put(C_AVERAGE, average);
 		db.insert(TABLE, null, values);
 		Log.d("DATAVASE SQL", "inserted values");
 	}
@@ -70,7 +72,7 @@ public class RiskData {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			String sql=String.format("create table %s " + 
-					"(%s int primary key, %s int, %s text, %s text)", TABLE, C_ID, C_CREATED_AT, C_SCORE, C_DISEASE);
+					"(%s int primary key, %s int, %s text, %s text, %s text)", TABLE, C_ID, C_CREATED_AT, C_SCORE, C_DISEASE, C_AVERAGE);
 			Log.d("SQL DATABASE", sql);
 			db.execSQL(sql);
 			

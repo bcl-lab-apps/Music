@@ -28,14 +28,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ExportActivity extends Activity {
+	int len; 
+	double[] riskDouble;
+	String average_risk;
 	MediaPlayer mp;
     TextView tv;
     Visualizer mVisualizer;
-    int len; 
     Button buttonExport;
     Button buttonShare;
     Button buttonSave;
-    double[] riskDouble;
     String[] riskScores;
 	String[] diseases;
 	Bundle extras;
@@ -96,6 +97,7 @@ public class ExportActivity extends Activity {
 			public void onClick(View arg0) {
 				Log.d("data storage", "onClicked");
 				riskDouble= (double[]) extras.get("risk_scores");
+				average_risk=(String) extras.get("average");
 				Log.d("risk scores", Arrays.toString((double[])extras.get("risk_scores")));
 				Log.d("risk scores array", Arrays.toString(riskDouble));
 				diseases= (String[]) extras.get("diseases");
@@ -110,7 +112,7 @@ public class ExportActivity extends Activity {
 				Log.d("String Args",result_score);
 				Log.d("String Args",result_diseases);
 				dialog= ProgressDialog.show(ExportActivity.this, "Saving Data", "Please wait...", true);
-				new saveData().execute(result_score,result_diseases);
+				new saveData().execute(result_score,result_diseases, average_risk);
 			}
 			
 		});
@@ -194,7 +196,7 @@ public class ExportActivity extends Activity {
 		protected String doInBackground(String... args) {
 			Log.d("data storage", "background thread started");
 			RiskData riskData= new RiskData(getApplicationContext());			
-			riskData.insert(args[0], args[1]);
+			riskData.insert(args[0], args[1], args[2]);
 			dialog.dismiss();
 			return null;
 		}

@@ -98,6 +98,7 @@ public class MusicActivity extends Activity {
     int time_duration;
     int height = LayoutParams.WRAP_CONTENT;
     boolean isDemo=false;
+    double average_score;
     SeekBar fSlider;
     MediaPlayer mediaPlayer=new MediaPlayer();
     ImageButton startStopButton;
@@ -123,6 +124,7 @@ public class MusicActivity extends Activity {
         viewinterval=(TextView) findViewById(R.id.textView2);     
         viewinterval.setText("");
         //data parsing
+        average_score=0;
         if(extras != null && extras.get("demo")==null){
         	dataDialog= ProgressDialog.show(MusicActivity.this, "Parsing data", "Please wait...", true);
         	Log.d("RISKS", "risk is not NULL");
@@ -142,11 +144,6 @@ public class MusicActivity extends Activity {
         	}
         	for(int e=0;e<individual_risk.size();e++){
         		scoresList.add(round(individual_risk.get(e)/population_risk.get(e),2));
-        		/**
-        		Log.d("Disease", diseases.get(e));
-        		Log.d("RISK Score", String.valueOf(individual_risk.get(e)));
-        		Log.d("RISK Score", String.valueOf(population_risk.get(e)));
-        		**/
         		Log.d("RISK Score", String.valueOf(round(individual_risk.get(e)/population_risk.get(e),2)));
         	}
         	riskscores=new double[scoresList.size()-NaNCount];
@@ -308,14 +305,17 @@ public class MusicActivity extends Activity {
     	double[] dbScores= new double[riskscores.length];
     	for(int s=0;s<riskscores.length;s++){
     		dbScores[s]=riskscores[s];
+    		average_score= average_score+riskscores[s];
     	}
+    	average_score=round((double) average_score/riskscores.length,2);
     	String result_score = ("" + Arrays.asList(dbScores)).
 	             replaceAll("(^.|.$)", "  ").replace(", ", "  , " );
     	String result_diseases = ("" + diseases).
 	             replaceAll("(^.|.$)", "  ").replace(", ", "  , " );
     	Log.d("db values", result_diseases);
     	RiskData riskData= new RiskData(getApplicationContext());    	
-		riskData.insert(result_score,result_diseases);
+		riskData.insert(result_score,result_diseases, String.valueOf(average_score));
+		Log.d("RISK", "average risk: "+ String.valueOf(average_score));
     }
 
 	class MIDISequence extends AsyncTask<String,Void,String>{
@@ -523,6 +523,11 @@ public class MusicActivity extends Activity {
 		 
 	 }
 	 
+	 static int[] disChord(int pitch){
+		
+		return null;
+		 
+	 }
 	
 	 public static double round(double value, int places) {
 		 NaNCount=0;
@@ -561,6 +566,7 @@ public class MusicActivity extends Activity {
 			                	diseasesArray[d]= diseases.get(d);
 			                }
 			                exportIntent.putExtra("diseases", diseasesArray);
+			                exportIntent.putExtra("average", String.valueOf(average_score));
 			                startActivity(exportIntent);
 			            }
 			        });
