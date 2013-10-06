@@ -99,6 +99,8 @@ public class MusicActivity extends Activity {
     int height = LayoutParams.WRAP_CONTENT;
     boolean isDemo=false;
     double average_score;
+    static int thirds;
+    static int fifths;
     SeekBar fSlider;
     MediaPlayer mediaPlayer=new MediaPlayer();
     ImageButton startStopButton;
@@ -327,8 +329,8 @@ public class MusicActivity extends Activity {
 			MidiTrack pianoTrack2=new MidiTrack();
 			MidiTrack pianoTrack3=new MidiTrack();
 			MidiTrack bassTrack = new MidiTrack();
-			MidiEvent pcBass = new ProgramChange(0,0,44);
-			bassTrack.insertEvent(pcBass);
+			MidiEvent pcBass = new ProgramChange(0,5,45);
+			//bassTrack.insertEvent(pcBass);
 			TextView viewinterval=(TextView) findViewById(R.id.textView2);
 			try {
 				 TimeSignature ts = new TimeSignature();
@@ -345,7 +347,15 @@ public class MusicActivity extends Activity {
 				 for (int x = 0; x < riskscores.length; x++) {
 					
 					if (riskscores[x] < 1){
-						for(int i=0;i<5;i++){
+						for(int r=0;r<2;r++){
+							NoteOn bassOn = new NoteOn(TickCount*480,channel,pitch,100);
+							NoteOff off4=new NoteOff(TickCount*480+960,channel,pitch,0);
+							bassTrack.insertEvent(bassOn);
+							bassTrack.insertEvent(off4);
+							
+							
+						}
+						for(int i=0;i<7;i++){
 							if(pitch<48){
 								pitch=pitch+7;
 								
@@ -354,28 +364,32 @@ public class MusicActivity extends Activity {
 								pitch=pitch-7;
 							}
 							pitch=AsOrDes(pitch,true,rn.nextInt(2),rn.nextInt(conintervals.length));
+							inversion(pitch,rn.nextInt(3));
 							NoteOn on=new NoteOn(TickCount*480,channel,pitch,100);
-							NoteOn third=new NoteOn(TickCount*480,channel,pitch+4,100);
-							NoteOn fifth = new NoteOn(TickCount*480,channel,pitch+7,100);
-							NoteOn bassOn = new NoteOn(TickCount*480,channel,pitch,100);
+							NoteOn third=new NoteOn(TickCount*480,channel,thirds,100);
+							NoteOn fifth = new NoteOn(TickCount*480,channel,fifths,100);
 							NoteOff off=new NoteOff(TickCount*480+480,channel,pitch,0);
-							NoteOff off2=new NoteOff(TickCount*480+240,channel,pitch+4,0);
-							NoteOff off3=new NoteOff(TickCount*480+240,channel,pitch+7,0);
-							NoteOff off4=new NoteOff(TickCount*480+480,channel,pitch+7,0);
+							NoteOff off2=new NoteOff(TickCount*480+480,channel,thirds,0);
+							NoteOff off3=new NoteOff(TickCount*480+480,channel,fifths,0);
 							pianoTrack.insertEvent(on);
 							pianoTrack2.insertEvent(third);
 							pianoTrack3.insertEvent(fifth);
 							pianoTrack.insertEvent(off);
 							pianoTrack2.insertEvent(off2);
-							pianoTrack3.insertEvent(off3);
-							bassTrack.insertEvent(bassOn);
-							bassTrack.insertEvent(off4);
+							pianoTrack3.insertEvent(off3);							
 							TickCount++;
 						}
 					}
 					
 					 else {
-						for(int i=0;i<5;i++){
+						 
+						 for(int r=0;r<2;r++){
+								NoteOn bassOn = new NoteOn(TickCount*480,channel,pitch,100);
+								NoteOff off4=new NoteOff(TickCount*480+960,channel,pitch,0);
+								bassTrack.insertEvent(bassOn);
+								bassTrack.insertEvent(off4);							
+						}
+						for(int i=0;i<7;i++){
 							if(pitch<40){
 								pitch=pitch+7;
 								
@@ -385,11 +399,9 @@ public class MusicActivity extends Activity {
 							}
 							pitch=AsOrDes(pitch,false,rn.nextInt(2),rn.nextInt(disintervals.length));
 							NoteOn on=new NoteOn(TickCount*480,channel,pitch,127);
-							NoteOn bassOn = new NoteOn(TickCount*480,channel,pitch,100);
 							NoteOff off=new NoteOff(TickCount*480+480,channel,pitch,0);
 							NoteOff off2=new NoteOff(TickCount*480+480,channel,pitch+2,0);
-							NoteOff off3=new NoteOff(TickCount*480+240,channel,pitch+3,0);
-							NoteOff off4=new NoteOff(TickCount*480+240,channel,pitch+3,0);
+							NoteOff off3=new NoteOff(TickCount*480+480,channel,pitch+3,0);
 							NoteOn third=new NoteOn(TickCount*480,channel,pitch+2,50);
 							NoteOn fifth = new NoteOn(TickCount*480,channel,pitch+3,50);
 							pianoTrack.insertEvent(on);
@@ -398,8 +410,6 @@ public class MusicActivity extends Activity {
 							pianoTrack.insertEvent(off);
 							pianoTrack2.insertEvent(off2);
 							pianoTrack3.insertEvent(off3);
-							bassTrack.insertEvent(bassOn);
-							bassTrack.insertEvent(off4);
 							TickCount++;
 						}
 						
@@ -522,10 +532,20 @@ public class MusicActivity extends Activity {
 		 return pitch;
 		 
 	 }
-	 
-	 static int[] disChord(int pitch){
-		
-		return null;
+	 //chord inversions
+	 static void inversion(int pitch, int invers){
+		 if(invers==0){
+			 thirds= pitch+4;
+			 fifths= pitch+7;
+		 }
+		 if(invers==1){
+			 thirds= pitch-8;
+			 fifths= pitch-5;
+		 }
+		 if(invers==2){
+			 fifths= pitch-5;
+			 thirds= pitch+4;
+		 }
 		 
 	 }
 	
@@ -603,7 +623,6 @@ public class MusicActivity extends Activity {
 			vSlider.setMax(10);
 			mVisualizer.setEnabled(true);
 			if(mediaPlayer.isPlaying()){
-				Log.d("Audio", "MediaPlayer audio session ID: " + mediaPlayer.getAudioSessionId());
 				try {
 					currentPosition = mediaPlayer
 							.getCurrentPosition();
@@ -615,7 +634,6 @@ public class MusicActivity extends Activity {
 					risk_index=(int) currentPosition/changeFrequency;
 					diseaseView.setText("Now Evaluating: "+ diseases.get((int) currentPosition/changeFrequency));
 					individual_risk_bar.getLayoutParams().width=(int) (bar_length*riskscores[risk_index]);
-					Log.d("length", String.valueOf((int) Math.floor(bar_length*riskscores[risk_index])));
 					//Log.d("Bar Length",String.valueOf(individual_risk_bar.getWidth()));
 					individual_risk_bar.setText("Your Risk: " + String.valueOf(riskscores[risk_index]) + "x the average");
 					if(riskscores[risk_index]<1){
