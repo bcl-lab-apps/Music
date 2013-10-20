@@ -1,5 +1,7 @@
 int anim fadein 0x7f040000
 int anim fadeout 0x7f040001
+int attr buttonBarButtonStyle 0x7f010013
+int attr buttonBarStyle 0x7f010012
 int attr confirm_logout 0x7f01000c
 int attr done_button_background 0x7f010006
 int attr done_button_text 0x7f010004
@@ -18,6 +20,7 @@ int attr show_search_box 0x7f01000b
 int attr show_title_bar 0x7f010002
 int attr title_bar_background 0x7f010005
 int attr title_text 0x7f010003
+int color black_overlay 0x7f090007
 int color com_facebook_blue 0x7f090002
 int color com_facebook_loginview_text_color 0x7f090006
 int color com_facebook_picker_search_bar_background 0x7f090000
@@ -173,10 +176,11 @@ int menu main 0x7f0c0002
 int menu sharing 0x7f0c0003
 int menu sharing_acitivity 0x7f0c0004
 int menu web_view 0x7f0c0005
-int raw connect_23andme 0x7f060000
-int raw ic_media_pause 0x7f060001
-int raw ic_media_play 0x7f060002
-int raw twrja73f 0x7f060003
+int raw agedistrbution 0x7f060000
+int raw connect_23andme 0x7f060001
+int raw ic_media_pause 0x7f060002
+int raw ic_media_play 0x7f060003
+int raw twrja73f 0x7f060004
 int string APIError 0x7f0a0023
 int string Pause 0x7f0a0020
 int string Stop 0x7f0a0021
@@ -214,6 +218,8 @@ int string com_facebook_usersettingsfragment_not_logged_in 0x7f0a000a
 int string connect23andme 0x7f0a0032
 int string demo 0x7f0a0033
 int string disease 0x7f0a002f
+int string dummy_button 0x7f0a003a
+int string dummy_content 0x7f0a003b
 int string error 0x7f0a0035
 int string export 0x7f0a002d
 int string facebook_share 0x7f0a002c
@@ -228,6 +234,7 @@ int string sharing_header 0x7f0a002b
 int string successfully_posted 0x7f0a0034
 int string title_activity_error 0x7f0a0024
 int string title_activity_export 0x7f0a002a
+int string title_activity_fullscreen 0x7f0a0039
 int string title_activity_sharing 0x7f0a0028
 int string title_activity_sharing_acitivity 0x7f0a0029
 int string title_activity_web_view 0x7f0a0025
@@ -236,8 +243,15 @@ int string toggleoff 0x7f0a001c
 int string toggleon 0x7f0a001d
 int style AppBaseTheme 0x7f0b0002
 int style AppTheme 0x7f0b0003
+int style ButtonBar 0x7f0b0005
+int style ButtonBarButton 0x7f0b0006
+int style FullscreenActionBarStyle 0x7f0b0007
+int style FullscreenTheme 0x7f0b0004
 int style com_facebook_loginview_default_style 0x7f0b0000
 int style com_facebook_loginview_silver_style 0x7f0b0001
+int[] styleable ButtonBarContainerTheme { 0x7f010012, 0x7f010013 }
+int styleable ButtonBarContainerTheme_buttonBarButtonStyle 1
+int styleable ButtonBarContainerTheme_buttonBarStyle 0
 int[] styleable com_facebook_friend_picker_fragment { 0x7f010007 }
 int styleable com_facebook_friend_picker_fragment_multi_select 0
 int[] styleable com_facebook_login_view { 0x7f01000c, 0x7f01000d, 0x7f01000e, 0x7f01000f }

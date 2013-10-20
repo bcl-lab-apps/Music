@@ -51,7 +51,6 @@ public class WebViewActivity extends Activity {
 	Hashtable<String, String> population_risk=new Hashtable<String, String>();
 	
 	public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
 		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 		setContentView(R.layout.webview);
 		
@@ -101,6 +100,7 @@ public class WebViewActivity extends Activity {
 				}
 			}
 		});
+		super.onCreate(savedInstanceState);
 		
 
 	}

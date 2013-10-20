@@ -116,17 +116,17 @@ public class MusicActivity extends Activity {
     TextView diseaseView;
     ProgressDialog dataDialog;
     ProgressDialog musicDialog;
+    MusicApp app;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
         setContentView(R.layout.activity_music);
         Bundle extras = getIntent().getExtras();
         viewinterval=(TextView) findViewById(R.id.textView2);     
         viewinterval.setText("");
         //data parsing
-        average_score=0;
+        app= (MusicApp) getApplication();
+        Log.d("DISEASE ORDER", app.diseaseOrder.toString());
         if(extras != null && extras.get("demo")==null){
         	dataDialog= ProgressDialog.show(MusicActivity.this, "Parsing data", "Please wait...", true);
         	Log.d("RISKS", "risk is not NULL");
@@ -256,9 +256,9 @@ public class MusicActivity extends Activity {
                
         //set the risk bars invisible
         average_risk_bar=(TextView) findViewById(R.id.textView3);
-        //average_risk_bar.setVisibility(View.INVISIBLE);
+        average_risk_bar.setVisibility(View.INVISIBLE);
         individual_risk_bar=(TextView) findViewById(R.id.messageSuffixTextView);
-        //individual_risk_bar.setVisibility(View.INVISIBLE);
+        individual_risk_bar.setVisibility(View.INVISIBLE);
         rn = new Random();
         fSlider = (SeekBar) findViewById(R.id.frequency);        
         fSlider.setProgress(0);
@@ -286,6 +286,8 @@ public class MusicActivity extends Activity {
 				startActivity(intent);
 			}        	
         });
+        super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
    };
            
     @Override
@@ -347,14 +349,12 @@ public class MusicActivity extends Activity {
 				 for (int x = 0; x < riskscores.length; x++) {
 					
 					if (riskscores[x] < 1){
-						for(int r=0;r<2;r++){
-							NoteOn bassOn = new NoteOn(TickCount*480,channel,pitch,100);
-							NoteOff off4=new NoteOff(TickCount*480+960,channel,pitch,0);
-							bassTrack.insertEvent(bassOn);
-							bassTrack.insertEvent(off4);
+						
+						NoteOn bassOn = new NoteOn(TickCount*480,channel,pitch,100);
+						NoteOff off4=new NoteOff(TickCount*480+1920,channel,pitch,0);
+						bassTrack.insertEvent(bassOn);
+						bassTrack.insertEvent(off4);
 							
-							
-						}
 						for(int i=0;i<7;i++){
 							if(pitch<48){
 								pitch=pitch+7;
@@ -383,12 +383,10 @@ public class MusicActivity extends Activity {
 					
 					 else {
 						 
-						 for(int r=0;r<2;r++){
-								NoteOn bassOn = new NoteOn(TickCount*480,channel,pitch,100);
-								NoteOff off4=new NoteOff(TickCount*480+960,channel,pitch,0);
-								bassTrack.insertEvent(bassOn);
-								bassTrack.insertEvent(off4);							
-						}
+						NoteOn bassOn = new NoteOn(TickCount*480,channel,pitch,100);
+						NoteOff off4=new NoteOff(TickCount*480+1920,channel,pitch,0);
+						bassTrack.insertEvent(bassOn);
+						bassTrack.insertEvent(off4);
 						for(int i=0;i<7;i++){
 							if(pitch<40){
 								pitch=pitch+7;
@@ -634,7 +632,7 @@ public class MusicActivity extends Activity {
 					risk_index=(int) currentPosition/changeFrequency;
 					diseaseView.setText("Now Evaluating: "+ diseases.get((int) currentPosition/changeFrequency));
 					individual_risk_bar.getLayoutParams().width=(int) (bar_length*riskscores[risk_index]);
-					//Log.d("Bar Length",String.valueOf(individual_risk_bar.getWidth()));
+					individual_risk_bar.setVisibility(View.VISIBLE);
 					individual_risk_bar.setText("Your Risk: " + String.valueOf(riskscores[risk_index]) + "x the average");
 					if(riskscores[risk_index]<1){
 						individual_risk_bar.setBackgroundResource(R.drawable.risk_low);

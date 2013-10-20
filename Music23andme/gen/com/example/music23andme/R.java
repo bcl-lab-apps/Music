@@ -13,6 +13,14 @@ public final class R {
         public static final int fadeout=0x7f040001;
     }
     public static final class attr {
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int buttonBarButtonStyle=0x7f010013;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int buttonBarStyle=0x7f010012;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -155,6 +163,7 @@ containing a value of this type.
         public static final int title_text=0x7f010003;
     }
     public static final class color {
+        public static final int black_overlay=0x7f090007;
         public static final int com_facebook_blue=0x7f090002;
         public static final int com_facebook_loginview_text_color=0x7f090006;
         public static final int com_facebook_picker_search_bar_background=0x7f090000;
@@ -328,10 +337,11 @@ containing a value of this type.
         public static final int web_view=0x7f0c0005;
     }
     public static final class raw {
-        public static final int connect_23andme=0x7f060000;
-        public static final int ic_media_pause=0x7f060001;
-        public static final int ic_media_play=0x7f060002;
-        public static final int twrja73f=0x7f060003;
+        public static final int agedistrbution=0x7f060000;
+        public static final int connect_23andme=0x7f060001;
+        public static final int ic_media_pause=0x7f060002;
+        public static final int ic_media_play=0x7f060003;
+        public static final int twrja73f=0x7f060004;
     }
     public static final class string {
         public static final int APIError=0x7f0a0023;
@@ -371,6 +381,8 @@ containing a value of this type.
         public static final int connect23andme=0x7f0a0032;
         public static final int demo=0x7f0a0033;
         public static final int disease=0x7f0a002f;
+        public static final int dummy_button=0x7f0a003a;
+        public static final int dummy_content=0x7f0a003b;
         public static final int error=0x7f0a0035;
         public static final int export=0x7f0a002d;
         public static final int facebook_share=0x7f0a002c;
@@ -385,6 +397,7 @@ containing a value of this type.
         public static final int successfully_posted=0x7f0a0034;
         public static final int title_activity_error=0x7f0a0024;
         public static final int title_activity_export=0x7f0a002a;
+        public static final int title_activity_fullscreen=0x7f0a0039;
         public static final int title_activity_sharing=0x7f0a0028;
         public static final int title_activity_sharing_acitivity=0x7f0a0029;
         public static final int title_activity_web_view=0x7f0a0025;
@@ -419,6 +432,10 @@ containing a value of this type.
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f0b0003;
+        public static final int ButtonBar=0x7f0b0005;
+        public static final int ButtonBarButton=0x7f0b0006;
+        public static final int FullscreenActionBarStyle=0x7f0b0007;
+        public static final int FullscreenTheme=0x7f0b0004;
         public static final int com_facebook_loginview_default_style=0x7f0b0000;
         public static final int com_facebook_loginview_silver_style=0x7f0b0001;
     }
@@ -426,6 +443,46 @@ containing a value of this type.
         public static final int prefs=0x7f050000;
     }
     public static final class styleable {
+        /** 
+         Declare custom theme attributes that allow changing which styles are
+         used for button bars depending on the API level.
+         ?android:attr/buttonBarStyle is new as of API 11 so this is
+         necessary to support previous API levels.
+    
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #ButtonBarContainerTheme_buttonBarButtonStyle com.example.music23andme:buttonBarButtonStyle}</code></td><td></td></tr>
+           <tr><td><code>{@link #ButtonBarContainerTheme_buttonBarStyle com.example.music23andme:buttonBarStyle}</code></td><td></td></tr>
+           </table>
+           @see #ButtonBarContainerTheme_buttonBarButtonStyle
+           @see #ButtonBarContainerTheme_buttonBarStyle
+         */
+        public static final int[] ButtonBarContainerTheme = {
+            0x7f010012, 0x7f010013
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.example.music23andme.R.attr#buttonBarButtonStyle}
+          attribute's value can be found in the {@link #ButtonBarContainerTheme} array.
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          @attr name com.example.music23andme:buttonBarButtonStyle
+        */
+        public static final int ButtonBarContainerTheme_buttonBarButtonStyle = 1;
+        /**
+          <p>This symbol is the offset where the {@link com.example.music23andme.R.attr#buttonBarStyle}
+          attribute's value can be found in the {@link #ButtonBarContainerTheme} array.
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          @attr name com.example.music23andme:buttonBarStyle
+        */
+        public static final int ButtonBarContainerTheme_buttonBarStyle = 0;
         /** Attributes that can be used with a com_facebook_friend_picker_fragment.
            <p>Includes the following attributes:</p>
            <table>
