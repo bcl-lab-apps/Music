@@ -22,6 +22,7 @@ public class MusicApp extends Application{
 	static final String TAG= "GeneMusic";
 	Hashtable<Integer, String> diseaseOrder;
 	ArrayList<String> diseaselist;
+	Hashtable<Integer, String> listOrder;
 	@Override
 	public void onCreate() {
 		Log.d("APPLICATION", "onCreate called");
@@ -29,7 +30,8 @@ public class MusicApp extends Application{
 		diseaseOrder= new Hashtable<Integer, String>();
 		InputStream inputStream=getResources().openRawResource(R.raw.agedistrbution);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-		Map dictionaryHash = new HashMap();
+		listOrder= new Hashtable<Integer, String>();
+		
 		try{
 			String[] words=new String[3];
 			String line;
@@ -55,13 +57,21 @@ public class MusicApp extends Application{
 			Log.d(TAG, "currently comparing: "+ diseases.get(x));
 			while(it.hasNext()){
 				Map.Entry<Integer, String> entry = (Entry<Integer, String>) it.next();
-				if(diseases.get(x).equals(entry.getValue())){
+				if(diseases.get(x).equals(entry.getValue()) || diseases.get(x).startsWith(entry.getValue())){
 					Log.d(TAG, "match: "+ diseases.get(x) + " "+ entry.getValue());
+					listOrder.put(entry.getKey(), entry.getValue());
 				}
+			
 			} 
 			
 			Log.d(TAG, "Current iteration: "+ Integer.toString(x));
 		}
+		Iterator it2= listOrder.entrySet().iterator();
+		while(it2.hasNext()){
+			Map.Entry<Integer, String> entry = (Entry<Integer, String>) it2.next();
+			diseases.set(entry.getKey()-1, entry.getValue());
+		}
+		Log.d(TAG, "Sorted list: " + diseases.toString());
 		
 	}
 	/**
