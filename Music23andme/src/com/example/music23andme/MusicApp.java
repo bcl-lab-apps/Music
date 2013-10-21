@@ -7,7 +7,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import android.app.Application;
 import android.util.Log;
@@ -45,15 +48,33 @@ public class MusicApp extends Application{
 		}
 	}
 	
-	public Hashtable valueCaompare(Hashtable unSortedTable, Hashtable sortedTable){
+	public void valueCaompare(List<String> diseases, List<Double> scores, Hashtable sortedTable){
 		
-		return unSortedTable;
+		for(int x=0;x<diseases.size();x++){
+			Iterator it=sortedTable.entrySet().iterator();
+			Log.d(TAG, "currently comparing: "+ diseases.get(x));
+			while(it.hasNext()){
+				Map.Entry<Integer, String> entry = (Entry<Integer, String>) it.next();
+				if(diseases.get(x).equals(entry.getValue())){
+					Log.d(TAG, "match: "+ diseases.get(x) + " "+ entry.getValue());
+				}
+			} 
+			
+			Log.d(TAG, "Current iteration: "+ Integer.toString(x));
+		}
 		
 	}
-	
-	public ArrayList<String> orderList(ArrayList list){
-		
+	/**
+	public ArrayList<String> sortList(ArrayList list){
+		for
 		return list;
+		
+	}
+	**/
+	
+	public ArrayList<String> orderLists(ArrayList unorderedList, ArrayList orderedList){
+		
+		return unorderedList;
 		
 	}
 

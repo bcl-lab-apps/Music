@@ -70,6 +70,7 @@ public class MusicActivity extends Activity {
 	List<String> diseases= new ArrayList<String>();
 	List<Double> population_risk= new ArrayList<Double>();
 	List<Double> individual_risk =  new ArrayList<Double>();
+	List<String> diseaseOrdered= new ArrayList<String>();
 	/**
 	double[] riskscores={1.0,1.48,1.29,1.49,1.25,1.42,
 			1.57,1.80,0.72,0.75,0.79,0.11,0.58,0.66,
@@ -136,7 +137,7 @@ public class MusicActivity extends Activity {
         	pop_string.addAll(popriskHash.values());
         	ind_string.addAll(indriskHash.values());
         	diseases.addAll(popriskHash.keySet());
-
+        	
         	for(String pop_risk:pop_string){
         		population_risk.add(Double.valueOf(pop_risk));
         	}
@@ -149,6 +150,7 @@ public class MusicActivity extends Activity {
         		Log.d("RISK Score", String.valueOf(round(individual_risk.get(e)/population_risk.get(e),2)));
         	}
         	riskscores=new double[scoresList.size()-NaNCount];
+        	app.valueCaompare(diseases, scoresList, app.diseaseOrder);
         	for(int r=0;r<scoresList.size();r++){
         		if(scoresList.get(r)!=0.0){       			
         			riskscores[index]=scoresList.get(r);

@@ -47,7 +47,6 @@ public class RiskData {
 		cursor.moveToFirst();
 		risks[0]= cursor.getString(cursor.getColumnIndex(C_SCORE));
 		risks[1]=cursor.getString(cursor.getColumnIndex(C_DISEASE));
-		Log.d("ARRAY LENGTH", String.valueOf(risks.length));
 		cursor.close();
 		return risks;	
 	}

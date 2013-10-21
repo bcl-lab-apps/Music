@@ -11,7 +11,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="84dp"
-        android:text="Login 23andMe"
+        android:text="Login to 23andMe"
         android:background="#0099CC" 
         android:drawableLeft="@drawable/connectbutton"/>
 

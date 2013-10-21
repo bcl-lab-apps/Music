@@ -1,29 +1,31 @@
 Bipolar Disorder,6,1
 Type 1 Diabetes,10 to 17,2
-Crohn's Disease (Inflammatory Bowel Disease),15-30 ,3
-Ulcerative Colitis,15-30,3
-Rheumatoid Arthritis,20 and 30,4
-Lupus (Systemic Lupus Erythematosus),15-40,5
-Restless Legs Syndrome,20 and 40,6
-Psoriasis,>18,7
-Gallstones,37,8
-Age-related Macular Degeneration,40,9
-Multiple Sclerosis,40-59,10
-Primary Biliary Cirrhosis,50-54,11
-Parkinson's Disease,>50,12
-Breast Cancer,40-70 ,13
-Scleroderma,50-60,14
-Type 2 Diabetes,20 (40)-75,14
-Prostate Cancer,50-60,15
-Lung cancer,60,16
-Esophageal Squamous Cell Carcinoma,>60,17
-Exfoliation Glaucoma,>50 or 65,18
-Melanoma,50-70,19
-Chronic Kidney Disease,60,20
-Colorectal Cancer,60,20
-Gout,>65,21
-Alzheimer's Disease,65,22
-Coronary Heart Disease,>65,22
-Stomach Cancer,69,23
-Atrial Fibrillation,70,24
-Venous Thromboembolism,>70,24
+Crohn's Disease,15-30 ,3
+Ulcerative Colitis,15-30,4
+Rheumatoid Arthritis,20 and 30,5
+Lupus (Systemic Lupus Erythematosus),15-40,6
+Restless Legs Syndrome,20 and 40,7
+Psoriasis,>18,8
+Gallstones,37,9
+Age-related Macular Degeneration,40,10
+Multiple Sclerosis,C40-59,11
+Primary Biliary Cirrhosis,50-54,12
+Parkinson's Disease,>50,13
+Breast Cancer,40-70 ,14
+Scleroderma (Limited Cutaneous Type),50-60,15
+Type 2 Diabetes,20 (40)-75,16
+Prostate Cancer,50-60,17
+Lung Cancer,60,18
+Esophageal Squamous Cell Carcinoma,>60,19
+Exfoliation Glaucoma,>50 or 65,20
+Melanoma,50-70,21
+Chronic Kidney Disease,60,22
+Esophageal Squamous Cell Carcinoma (ESCC),>55,23
+Colorectal Cancer,60,24
+Obesity, 60-69, 25
+Gout,>65,26
+Alzheimer's Disease,65,27
+Coronary Heart Disease,>65,28
+Stomach Cancer (Gastric Cardia Adenocarcinoma),69,29
+Atrial Fibrillation,70,30
+Venous Thromboembolism,>70,31
