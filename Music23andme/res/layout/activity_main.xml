@@ -12,7 +12,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="84dp"
         android:text="Login to 23andMe"
-        android:background="#0099CC" 
+        android:background="@drawable/gradient_button_blue" 
         android:drawableLeft="@drawable/connectbutton"/>
 
     <Button
@@ -23,7 +23,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
         android:text="Share on Facebbok" 
-        android:background="#0099CC"
+        android:background="@drawable/gradient_button_blue" 
         android:drawableLeft="@drawable/facebookicon"/>
 
     <Button
@@ -33,7 +33,7 @@
         android:layout_below="@+id/button_login23"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="45dp"
-        android:background="#0099CC"
+        android:background="@drawable/gradient_button_blue" 
         android:text="Play my music" 
         android:drawableLeft="@drawable/musicicon" />
 
@@ -45,7 +45,7 @@
         android:layout_below="@+id/button_loginfb"
         android:layout_marginTop="36dp"
         android:text="@string/demo"
-        android:background="#0099CC" 
+        android:background="@drawable/gradient_button_blue" 
         android:drawableLeft="@drawable/musicicon" />
 
 

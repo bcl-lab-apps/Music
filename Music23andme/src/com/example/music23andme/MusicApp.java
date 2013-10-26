@@ -17,6 +17,7 @@ import android.util.Log;
 import au.com.bytecode.opencsv.CSVParser;
 import au.com.bytecode.opencsv.CSVReader;
 
+//Sorting methods
 public class MusicApp extends Application{
 	
 	static final String TAG= "GeneMusic";

@@ -150,7 +150,7 @@ public class MusicActivity extends Activity {
         		Log.d("RISK Score", String.valueOf(round(individual_risk.get(e)/population_risk.get(e),2)));
         	}
         	riskscores=new double[scoresList.size()-NaNCount];
-        	app.valueCaompare(diseases, scoresList, app.diseaseOrder);
+        	//app.valueCaompare(diseases, scoresList, app.diseaseOrder);
         	for(int r=0;r<scoresList.size();r++){
         		if(scoresList.get(r)!=0.0){       			
         			riskscores[index]=scoresList.get(r);
