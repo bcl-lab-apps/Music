@@ -18,7 +18,7 @@ public class RiskData {
 	public final String C_CREATED_AT="created_at";
 	public final String C_SCORE= "risk_score";
 	public final String C_DISEASE= "diseases";
-	public final String C_AVERAGE= "average_risk";
+	//public final String C_AVERAGE= "average_risk";
 			
 	Context context;
 	DbHelper dbHelper;
@@ -29,15 +29,16 @@ public class RiskData {
 		dbHelper= new DbHelper();
 	}
 	
-	public void insert(String scores, String disease, String average){
+	public void insert(String scores, String disease){
 		db = dbHelper.getWritableDatabase();
+		db.delete(TABLE, null, null);
 		ContentValues values = new ContentValues();
 		values.put(C_CREATED_AT, new Date().getTime() );
 		values.put(C_SCORE, scores);
 		values.put(C_DISEASE, disease);
-		values.put(C_AVERAGE, average);
 		db.insert(TABLE, null, values);
 		Log.d("DATAVASE SQL", "inserted values");
+		db.close();
 	}
 	
 	public String[] getFirstScores(){
@@ -48,6 +49,7 @@ public class RiskData {
 		risks[0]= cursor.getString(cursor.getColumnIndex(C_SCORE));
 		risks[1]=cursor.getString(cursor.getColumnIndex(C_DISEASE));
 		cursor.close();
+		db.close();
 		return risks;	
 	}
 	
@@ -57,6 +59,7 @@ public class RiskData {
 		cursor.moveToFirst();
 		String result=cursor.getString(cursor.getColumnIndex(C_DISEASE));
 		cursor.close();
+		db.close();
 		return result;
 		
 	}
@@ -71,7 +74,7 @@ public class RiskData {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			String sql=String.format("create table %s " + 
-					"(%s int primary key, %s int, %s text, %s text, %s text)", TABLE, C_ID, C_CREATED_AT, C_SCORE, C_DISEASE, C_AVERAGE);
+					"(%s int primary key, %s int, %s text, %s text)", TABLE, C_ID, C_CREATED_AT, C_SCORE, C_DISEASE);
 			Log.d("SQL DATABASE", sql);
 			db.execSQL(sql);
 			

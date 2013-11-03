@@ -196,12 +196,14 @@ public class WebViewActivity extends Activity {
 						JSONArray riskArray = new JSONArray(risks.getString("risks"));
 						Log.d("risk array", riskArray.toString());
 						ArrayList<JSONObject> riskList= new ArrayList<JSONObject>();
+						Log.d(TAG, "parsing");
 						for(int x=0;x<riskArray.length();x++){ 
 							JSONObject risk=riskArray.getJSONObject(x);
-							//Log.d("JSON Object", risk.toString());
+							Log.d(TAG, risk.toString());
 							individual_risk.put(risk.getString("description"), risk.getString("risk"));
 							population_risk.put(risk.getString("description"), risk.getString("population_risk"));
 						}	
+						Log.d(TAG, "individual_risk: " + individual_risk.toString());
 					}
 
 				} catch (ClientProtocolException e) {

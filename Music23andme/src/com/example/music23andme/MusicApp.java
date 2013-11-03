@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -43,7 +44,7 @@ public class MusicApp extends Application{
 				diseaseOrder.put(Integer.valueOf(words[2]), words[0]);
 			}
 			
-			Log.d(TAG, "Hashtable: "+diseaseOrder.toString());
+			//Log.d(TAG, "Hashtable: "+diseaseOrder.toString());
 
 		}
 		catch (Exception ex) {
@@ -51,8 +52,9 @@ public class MusicApp extends Application{
 		}
 	}
 	
-	public void valueCaompare(List<String> diseases, List<Double> scores, Hashtable sortedTable){
-		
+	public void valueCompare(List<String> diseases,Hashtable sortedTable){
+		Log.d(TAG, "valueCompare() is called");
+		int matchCount=0;
 		for(int x=0;x<diseases.size();x++){
 			Iterator it=sortedTable.entrySet().iterator();
 			Log.d(TAG, "currently comparing: "+ diseases.get(x));
@@ -61,19 +63,24 @@ public class MusicApp extends Application{
 				if(diseases.get(x).equals(entry.getValue()) || diseases.get(x).startsWith(entry.getValue())){
 					Log.d(TAG, "match: "+ diseases.get(x) + " "+ entry.getValue());
 					listOrder.put(entry.getKey(), entry.getValue());
+					matchCount++;
 				}
 			
 			} 
 			
 			Log.d(TAG, "Current iteration: "+ Integer.toString(x));
 		}
+		Log.d(TAG, "match count: " + Integer.toString(matchCount));
 		Iterator it2= listOrder.entrySet().iterator();
-		while(it2.hasNext()){
-			Map.Entry<Integer, String> entry = (Entry<Integer, String>) it2.next();
-			diseases.set(entry.getKey()-1, entry.getValue());
-		}
-		Log.d(TAG, "Sorted list: " + diseases.toString());
+		Integer[] keys= (Integer[]) listOrder.keySet().toArray(new Integer[0]);
+		Arrays.sort(keys);
 		
+		for(int i=0;i<keys.length;i++){
+			Log.d(TAG, "Sorted list: "+ keys[i].toString()+ ": " + listOrder.get(keys[i]));
+			diseases.set(i, listOrder.get(keys[i]));
+		}
+		
+		Log.d(TAG, "Sorted Disease List: " + diseases.toString());
 	}
 	/**
 	public ArrayList<String> sortList(ArrayList list){

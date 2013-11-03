@@ -196,7 +196,7 @@ public class ExportActivity extends Activity {
 		protected String doInBackground(String... args) {
 			Log.d("data storage", "background thread started");
 			RiskData riskData= new RiskData(getApplicationContext());			
-			riskData.insert(args[0], args[1], args[2]);
+			riskData.insert(args[0], args[1]);
 			dialog.dismiss();
 			return null;
 		}

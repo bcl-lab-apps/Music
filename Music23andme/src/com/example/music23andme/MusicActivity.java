@@ -86,7 +86,7 @@ public class MusicActivity extends Activity {
 	int pitch=60;
 	private static final float VISUALIZER_HEIGHT_DIP = 50f;
 	Random rn;
-    Thread t;
+	final String TAG="MusicActvity";
  
     boolean isRunning = true;  
     boolean isPlaying=false;
@@ -137,20 +137,23 @@ public class MusicActivity extends Activity {
         	pop_string.addAll(popriskHash.values());
         	ind_string.addAll(indriskHash.values());
         	diseases.addAll(popriskHash.keySet());
-        	
-        	for(String pop_risk:pop_string){
-        		population_risk.add(Double.valueOf(pop_risk));
+        	app.valueCompare(diseases, app.diseaseOrder);
+        	Log.d("MusicActivity", "List: " + diseases.toString());
+        	for(String disease:diseases){
+        		Log.d("MusicActivity", "Disease: " + disease);
+        		Log.d("MusicActivity", "Values: "+ (String) indriskHash.get(disease));
+        		individual_risk.add(Double.valueOf((String) indriskHash.get(disease)));
+        		population_risk.add(Double.valueOf((String) popriskHash.get(disease)));
         	}
-        	
-        	for(String ind_risk:ind_string){
-        		individual_risk.add(Double.valueOf(ind_risk));
-        	}
+        	Log.d("MusicActivity", "Individual risks: " + individual_risk.toString());
+        	Log.d(TAG, "size: "+ individual_risk.size());
+        	Log.d(TAG, "population risks: "+ population_risk.toString());
+        	Log.d(TAG, "size: " + population_risk.size());
         	for(int e=0;e<individual_risk.size();e++){
         		scoresList.add(round(individual_risk.get(e)/population_risk.get(e),2));
-        		Log.d("RISK Score", String.valueOf(round(individual_risk.get(e)/population_risk.get(e),2)));
+        		//Log.d("RISK Score", String.valueOf(round(individual_risk.get(e)/population_risk.get(e),2)));
         	}
         	riskscores=new double[scoresList.size()-NaNCount];
-        	//app.valueCaompare(diseases, scoresList, app.diseaseOrder);
         	for(int r=0;r<scoresList.size();r++){
         		if(scoresList.get(r)!=0.0){       			
         			riskscores[index]=scoresList.get(r);
@@ -181,7 +184,7 @@ public class MusicActivity extends Activity {
         	Log.d("RISKS", "received no data");
         } 
         diseaseView= (TextView) findViewById(R.id.textView4);
-        if(new File("/mnt/sdcard/geneMusic.mid").exists() && isDemo==false){
+        if(new File("/mnt/sdcard/Music/geneMusic.mid").exists() && isDemo==false){
         	Log.d("MIDI File", "file already exists");
         	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
         	    @Override
@@ -314,13 +317,14 @@ public class MusicActivity extends Activity {
     		average_score= average_score+riskscores[s];
     	}
     	average_score=round((double) average_score/riskscores.length,2);
-    	String result_score = ("" + Arrays.asList(dbScores)).
+    	String result_score = ("" + scoresList).
 	             replaceAll("(^.|.$)", "  ").replace(", ", "  , " );
     	String result_diseases = ("" + diseases).
 	             replaceAll("(^.|.$)", "  ").replace(", ", "  , " );
     	Log.d("db values", result_diseases);
+    	Log.d("db values", result_score);
     	RiskData riskData= new RiskData(getApplicationContext());    	
-		riskData.insert(result_score,result_diseases, String.valueOf(average_score));
+		riskData.insert(result_score,result_diseases);
 		Log.d("RISK", "average risk: "+ String.valueOf(average_score));
     }
 
