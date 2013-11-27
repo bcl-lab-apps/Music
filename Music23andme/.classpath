@@ -6,5 +6,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry exported="true" kind="lib" path="C:/Users/Xi/Downloads/android-midi-libv3-1-42.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Xi/Downloads/facebook-android-sdk-3.5/facebook-android-sdk-3.5/facebook/libs/android-support-v4.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Xi/Downloads/opencsv-2.3/deploy/opencsv-2.3.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

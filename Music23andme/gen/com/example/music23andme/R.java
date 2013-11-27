@@ -214,7 +214,7 @@ containing a value of this type.
         public static final int com_facebook_list_section_header_background=0x7f02000e;
         public static final int com_facebook_loginbutton_silver=0x7f02000f;
         public static final int com_facebook_logo=0x7f020010;
-        public static final int com_facebook_picker_default_separator_color=0x7f020034;
+        public static final int com_facebook_picker_default_separator_color=0x7f020038;
         public static final int com_facebook_picker_item_background=0x7f020011;
         public static final int com_facebook_picker_list_focused=0x7f020012;
         public static final int com_facebook_picker_list_longpressed=0x7f020013;
@@ -242,17 +242,21 @@ containing a value of this type.
         public static final int gradient_rectangle=0x7f020029;
         public static final int gradient_red_button=0x7f02002a;
         public static final int ic_launcher=0x7f02002b;
-        public static final int musicicon=0x7f02002c;
-        public static final int progress=0x7f02002d;
-        public static final int progress_fill=0x7f02002e;
-        public static final int risk_elevated=0x7f02002f;
-        public static final int risk_high=0x7f020030;
-        public static final int risk_low=0x7f020031;
-        public static final int twrja73f=0x7f020032;
-        public static final int waveicon=0x7f020033;
+        public static final int ic_media_fullscreen_shrink=0x7f02002c;
+        public static final int ic_media_fullscreen_stretch=0x7f02002d;
+        public static final int ic_media_pause=0x7f02002e;
+        public static final int ic_media_play=0x7f02002f;
+        public static final int musicicon=0x7f020030;
+        public static final int progress=0x7f020031;
+        public static final int progress_fill=0x7f020032;
+        public static final int risk_elevated=0x7f020033;
+        public static final int risk_high=0x7f020034;
+        public static final int risk_low=0x7f020035;
+        public static final int twrja73f=0x7f020036;
+        public static final int waveicon=0x7f020037;
     }
     public static final class id {
-        public static final int action_settings=0x7f070034;
+        public static final int action_settings=0x7f07003d;
         public static final int button1=0x7f070014;
         public static final int button_login23=0x7f070007;
         public static final int button_loginfb=0x7f070008;
@@ -279,8 +283,10 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_profile_name=0x7f070031;
         public static final int export=0x7f070005;
         public static final int facebook=0x7f070003;
+        public static final int ffwd=0x7f070036;
         public static final int fragment_container=0x7f07001d;
         public static final int frequency=0x7f07000d;
+        public static final int fullscreen=0x7f07003b;
         public static final int greeting=0x7f070018;
         public static final int imageButton1=0x7f070012;
         public static final int imageButton2=0x7f070011;
@@ -288,14 +294,19 @@ containing a value of this type.
         public static final int login_button=0x7f070019;
         public static final int main_ui_container=0x7f070017;
         public static final int mediaController1=0x7f07000e;
+        public static final int mediacontroller_progress=0x7f070039;
         public static final int messageEditText=0x7f07001b;
         public static final int messageSuffixTextView=0x7f070016;
+        public static final int next=0x7f070037;
         public static final int normal=0x7f070001;
+        public static final int pause=0x7f070035;
         public static final int picker_subtitle=0x7f07002d;
         public static final int playDemo=0x7f07000a;
         public static final int playerActivity=0x7f07000b;
         public static final int postStatusUpdateButton=0x7f07001c;
+        public static final int prev=0x7f070033;
         public static final int profilePicture=0x7f07001a;
+        public static final int rew=0x7f070034;
         public static final int save=0x7f070006;
         public static final int seekBar2=0x7f070010;
         public static final int small=0x7f070000;
@@ -303,8 +314,10 @@ containing a value of this type.
         public static final int textView2=0x7f07000c;
         public static final int textView3=0x7f070015;
         public static final int textView4=0x7f070013;
+        public static final int time=0x7f07003a;
+        public static final int time_current=0x7f070038;
         public static final int timer=0x7f07000f;
-        public static final int webView1=0x7f070033;
+        public static final int webView1=0x7f07003c;
     }
     public static final class layout {
         public static final int activity_export=0x7f030000;
@@ -328,7 +341,8 @@ containing a value of this type.
         public static final int com_facebook_search_bar_layout=0x7f030012;
         public static final int com_facebook_usersettingsfragment=0x7f030013;
         public static final int errorpage=0x7f030014;
-        public static final int webview=0x7f030015;
+        public static final int media_controller=0x7f030015;
+        public static final int webview=0x7f030016;
     }
     public static final class menu {
         public static final int error=0x7f0c0000;

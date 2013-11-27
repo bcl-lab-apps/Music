@@ -33,6 +33,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.MediaController.MediaPlayerControl;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.SeekBar;
@@ -61,7 +63,7 @@ import com.leff.midi.event.meta.Tempo;
 import com.leff.midi.event.meta.TimeSignature;
 
 
-public class MusicActivity extends Activity {
+public class MusicActivity extends Activity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, VideoControllerView.MediaPlayerControl{
 	
 	HashMap indriskHash;
 	HashMap popriskHash;
@@ -103,7 +105,7 @@ public class MusicActivity extends Activity {
     static int thirds;
     static int fifths;
     SeekBar fSlider;
-    MediaPlayer mediaPlayer=new MediaPlayer();
+    MediaPlayer mediaPlayer;
     ImageButton startStopButton;
     ImageButton stopButton;
     SeekBar vSlider;
@@ -117,6 +119,7 @@ public class MusicActivity extends Activity {
     TextView diseaseView;
     ProgressDialog dataDialog;
     ProgressDialog musicDialog;
+    VideoControllerView mView;
     MusicApp app;
     
     @Override
@@ -128,6 +131,7 @@ public class MusicActivity extends Activity {
         //data parsing
         app= (MusicApp) getApplication();
         Log.d("DISEASE ORDER", app.diseaseOrder.toString());
+        mView= new VideoControllerView(MusicActivity.this,false);
         if(extras != null && extras.get("demo")==null){
         	dataDialog= ProgressDialog.show(MusicActivity.this, "Parsing data", "Please wait...", true);
         	Log.d("RISKS", "risk is not NULL");
@@ -444,8 +448,7 @@ public class MusicActivity extends Activity {
 			} catch (Exception e) {
 				Log.d("Audio error", e.toString());
 				e.printStackTrace();
-				String lineNum=Integer.toString(getLineNumber());
-				return e.toString()+" "+lineNum;
+				return null;
 			}
 		}
 		@Override
@@ -461,13 +464,7 @@ public class MusicActivity extends Activity {
 		
 		
 	}
-	 
-	 public static int getLineNumber() {
-		    return Thread.currentThread().getStackTrace()[2].getLineNumber();
-		}
-	
 	 void runOnExecute(){
-		 
 		 try {
 			if(isDemo==false){
 				mediaPlayer.setDataSource("/mnt/sdcard/Music/geneMusic.mid");				
@@ -779,4 +776,97 @@ public class MusicActivity extends Activity {
 		        canvas.drawLines(mPoints, mForePaint);
 		    }
 		}
-	}
+	 @Override
+	    public boolean onTouchEvent(MotionEvent event) {
+	        controller.show();
+	        return false;
+	    }
+
+	    // Implement SurfaceHolder.Callback
+	    @Override
+	    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+	        
+	    }
+
+	    @Override
+	    public void surfaceCreated(SurfaceHolder holder) {
+	            player.setDisplay(holder);
+	        player.prepareAsync();
+	    }
+
+	    @Override
+	    public void surfaceDestroyed(SurfaceHolder holder) {
+	        
+	    }
+	    // End SurfaceHolder.Callback
+
+	    // Implement MediaPlayer.OnPreparedListener
+	    @Override
+	    public void onPrepared(MediaPlayer mp) {
+	        controller.setMediaPlayer(this);
+	        controller.setAnchorView((FrameLayout) findViewById(R.id.videoSurfaceContainer));
+	        player.start();
+	    }
+	    // End MediaPlayer.OnPreparedListener
+
+	    // Implement VideoMediaController.MediaPlayerControl
+	    @Override
+	    public boolean canPause() {
+	        return true;
+	    }
+
+	    @Override
+	    public boolean canSeekBackward() {
+	        return true;
+	    }
+
+	    @Override
+	    public boolean canSeekForward() {
+	        return true;
+	    }
+
+	    @Override
+	    public int getBufferPercentage() {
+	        return 0;
+	    }
+
+	    @Override
+	    public int getCurrentPosition() {
+	        return mediaPlayer.getCurrentPosition();
+	    }
+
+	    @Override
+	    public int getDuration() {
+	        return mediaPlayer.getDuration();
+	    }
+
+	    @Override
+	    public boolean isPlaying() {
+	        return mediaPlayer.isPlaying();
+	    }
+
+	    @Override
+	    public void pause() {
+	        mediaPlayer.pause();
+	    }
+
+	    @Override
+	    public void seekTo(int i) {
+	    	mediaPlayer.seekTo(i);
+	    }
+
+	    @Override
+	    public void start() {
+	    	mediaPlayer.start();
+	    }
+
+	    @Override
+	    public boolean isFullScreen() {
+	        return false;
+	    }
+
+	    @Override
+	    public void toggleFullScreen() {
+	        
+	    }
+}
