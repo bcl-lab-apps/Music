@@ -280,7 +280,8 @@ public class MusicActivity extends Activity {
         View activity= this.findViewById(R.id.playerActivity); 
         
         RelativeLayout.LayoutParams params= new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, (int)(VISUALIZER_HEIGHT_DIP * getResources().getDisplayMetrics().density));
-        params.addRule(RelativeLayout.BELOW, R.id.messageSuffixTextView);
+        params.addRule(RelativeLayout.BELOW, R.id.textView3);
+        params.addRule(RelativeLayout.ALIGN_TOP,R.id.songCurrentDurationLabel);
         //RelativeLayout.LayoutParams risk_bar_params= new RelativeLayout.LayoutParams(source)
         mVisualizerView = new VisualizerView(this);
         mVisualizerView.setLayoutParams(params);
@@ -489,7 +490,7 @@ public class MusicActivity extends Activity {
                                         TextView viewinterval=(TextView) findViewById(R.id.textView2);
                                         viewinterval.setText("MIDI Playback");
                                         fSlider = (SeekBar) findViewById(R.id.songProgressBar);
-                                        startStopButton.setImageDrawable(getResources().getDrawable(R.raw.ic_media_pause));
+                                        startStopButton.setImageDrawable(getResources().getDrawable(R.drawable.btn_pause));
                                         Log.d("Progress","found progress bar");
                                 }
                         });
