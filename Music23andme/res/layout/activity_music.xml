@@ -16,21 +16,12 @@
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/frequency"
-        android:layout_alignRight="@+id/frequency"
         android:drawableLeft="@drawable/musicicon"
         android:gravity="center"
         android:text="MIDI Play Back"
         android:textColor="#FF0000"
         android:textSize="20sp" />
 
-    <MediaController
-        android:id="@+id/mediaController1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/frequency"
-        android:layout_below="@+id/frequency" >
-    </MediaController>
 
     <FrameLayout
         android:id="@+id/videoSurfaceContainer"
@@ -42,7 +33,6 @@
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/frequency"
         android:layout_below="@+id/textView2"
         android:layout_marginTop="21dp"
         android:text="TextView"

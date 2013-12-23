@@ -18,7 +18,8 @@
         android:layout_marginTop="66dp"
         android:layout_marginBottom="7dp"
         android:text="@string/facebook_share"
-        android:drawableLeft="@drawable/facebookicon" />
+        android:drawableLeft="@drawable/facebookicon"
+        android:background="@drawable/gradient_button_blue"  />
 
     <TextView
         android:id="@+id/textView1"
@@ -39,7 +40,8 @@
         android:layout_below="@+id/save"
         android:layout_marginTop="21dp"
         android:drawableLeft="@drawable/waveicon"
-        android:text="@string/export" />
+        android:text="@string/export"
+        android:background="@drawable/gradient_button_blue"  />
 
     <Button
         android:id="@+id/save"
@@ -49,6 +51,7 @@
         android:layout_below="@+id/facebook"
         android:layout_marginTop="22dp"
         android:drawableLeft="@drawable/datasave"
-        android:text="@string/savedata" />
+        android:text="@string/savedata" 
+        android:background="@drawable/gradient_button_blue" />
 
 </RelativeLayout>

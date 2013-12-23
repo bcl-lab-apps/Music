@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.music23andme"
+    package="com.bcl.music23andme"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -16,16 +16,18 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".MusicApp"
+        android:name="com.bcl.music23andme.MusicApp"
         android:allowBackup="true"
-        android:icon="@drawable/dna_app_logo"
+        android:debuggable="false"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" 
-        android:debuggable="true">
+        android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.music23andme.MainActivity"
+            android:name="com.bcl.music23andme.MainActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:label="@string/app_name"
-            android:launchMode="singleTop" android:screenOrientation="portrait" android:configChanges="keyboardHidden|orientation">
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,28 +35,34 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.music23andme.ErrorActivity"
-            android:label="@string/title_activity_error" android:screenOrientation="portrait" android:configChanges="keyboardHidden|orientation">
+            android:name="com.bcl.music23andme.ErrorActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/title_activity_error"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.example.music23andme.WebViewActivity"
-            android:label="@string/title_activity_web_view" android:screenOrientation="portrait" android:configChanges="keyboardHidden|orientation">
+            android:name="com.bcl.music23andme.WebViewActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/title_activity_web_view"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.example.music23andme.Sharing"
-            android:label="@string/title_activity_sharing" android:screenOrientation="portrait" android:configChanges="keyboardHidden|orientation">
+            android:name="com.bcl.music23andme.SharingActivity"
+            android:configChanges="keyboard|keyboardHidden"
+            android:label="adfsd"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.example.music23andme.SharingActivity"
-            android:label="adfsd" android:screenOrientation="portrait" android:configChanges="keyboard|keyboardHidden">
+            android:name="com.bcl.music23andme.ExportActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/title_activity_export"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.example.music23andme.ExportActivity"
-            android:label="@string/title_activity_export" android:screenOrientation="portrait" android:configChanges="keyboardHidden|orientation">
-        </activity>
-        <activity
-            android:name="com.example.music23andme.MusicActivity"
-            android:label="@string/title_activity_welcome" android:screenOrientation="portrait" android:configChanges="orientation">
+            android:name="com.bcl.music23andme.MusicActivity"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_welcome"
+            android:screenOrientation="portrait" >
         </activity>
 
         <meta-data
@@ -63,10 +71,8 @@
 
         <activity android:name="com.facebook.LoginActivity" />
         <activity
-            android:name="com.example.music23andme.FullscreenActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_fullscreen"
-            android:theme="@style/FullscreenTheme" >
+            android:name="com.bcl.music23andme.SmartActivity"
+            android:label="@string/title_activity_smart" >
         </activity>
     </application>
 
