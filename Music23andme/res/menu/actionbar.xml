@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+     <item
+        android:id="@+id/action_connect"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="Connect to 23andme"/>
+     <item android:id="@+id/action_share"
+         	android:orderInCategory="90"
+         	android:showAsAction="always"
+         	android:title="Share on Facebook"/>
+     <item android:id="@+id/action_home"
+         android:orderInCategory="70"
+         android:showAsAction="always"
+         android:title="Home"/>
+     <item android:id="@+id/action_music"
+         android:orderInCategory="80"
+         android:showAsAction="always"
+         android:title="Play music"/>
+</menu>

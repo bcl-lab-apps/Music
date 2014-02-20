@@ -5,9 +5,13 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.bcl.music23andme.R;
 import com.facebook.*;
@@ -108,6 +112,54 @@ public class MainActivity extends Activity {
 	        }
 	    });
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.actionbar, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_connect:
+			Toast.makeText(this, "Connecting to 23andme", Toast.LENGTH_SHORT)
+			.show();
+			Intent connectIt= new Intent(MainActivity.this,WebViewActivity.class);
+			startActivity(connectIt);
+			break;
+		case R.id.action_home:
+			Intent hintent = new Intent(this, MainActivity.class);
+			  hintent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			  startActivity(hintent);
+			  break;
+		case R.id.action_music:
+			Intent mintent = new Intent(this, MusicActivity.class);
+			  startActivity(mintent);
+			  break;
+		case R.id.action_share:
+			if (FacebookDialog.canPresentShareDialog(getApplicationContext(), 
+	                FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
+	    		FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(MainActivity.this)
+	    		.setLink("https://developers.facebook.com/android")
+	    		.build();
+	    		uiHelper.trackPendingDialogCall(shareDialog.present());
+	    	}
+			break;
+		case android.R.id.home:
+			  Intent intent = new Intent(this, MainActivity.class);
+			  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			  startActivity(intent);
+			  break; 
+			
+		default:
+			break;
+		}
+		
+		return true;
+	}
+	
 	
 	@Override
 	protected void onResume() {

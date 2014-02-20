@@ -24,6 +24,12 @@
         <item name="buttonBarStyle">@style/ButtonBar</item>
         <item name="buttonBarButtonStyle">@style/ButtonBarButton</item>
     </style>
+    
+    <style name="MyActionBarTabStyle" parent="android:style/Widget.Holo.Light.ActionBar.TabView">
+    	<item name="android:background">@drawable/actionbar_tab_bg</item>
+    	<item name="android:paddingLeft">32dp</item>
+    	<item name="android:paddingRight">32dp</item>
+	</style>
 
     <style name="ButtonBar">
         <item name="android:paddingLeft">2dp</item>

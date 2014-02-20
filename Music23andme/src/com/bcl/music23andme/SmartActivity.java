@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.bcl.music23andme.R;
+import com.facebook.UiLifecycleHelper;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -45,23 +46,21 @@ public class SmartActivity extends Activity {
 	ProgressDialog dataDialog;
 	//have to use google.com because Android becomes wierd when the redirect_uri is't a working one
 	final String REDIRECT_URI = "http://www.blankwebsite.com";
-	final String CLIENT_ID = "021772bf49aa3d0b7b5623fa926eab02";
-	final String CLIENT_SECRET = "7278d594495d28c17cc183ef3279be24";
+	final String CLIENT_ID = "2vOKNjyUwQwSyJOIF3bfBs3m68tfmt";
+	final String CLIENT_SECRET = "txrQR0UTbHzhpHUDhjVOSWNG2N89VC";
 	final String SCOPE = "basic names genomes analyses";
 	final String TAG= "WEBVIEW";
 	Hashtable<String, String> individual_risk=new Hashtable<String, String>();
 	Hashtable<String, String> population_risk=new Hashtable<String, String>();
-	
+	private UiLifecycleHelper uiHelper;
 	public void onCreate(Bundle savedInstanceState){
 		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 		setContentView(R.layout.webview);
 		
 		gWebView = (WebView) findViewById(R.id.webView1);
 
-		pageDialog=ProgressDialog.show(SmartActivity.this, "", "connecting to 23andme,,,");
-		gWebView.loadUrl("https://api.23andme.com/authorize/?redirect_uri="
-				+ REDIRECT_URI + "&response_type=code&client_id=" + CLIENT_ID
-				+ "&scope=" + SCOPE);
+		pageDialog=ProgressDialog.show(SmartActivity.this, "", "connecting to SMART Genomics...");
+		gWebView.loadUrl(" https://genomics-advisor.smartplatforms.org:7000/auth/authorize?response_type=code&client_id=" + CLIENT_ID+ "&scope=read:account+read:sequence&offline=true");
 		
 		Log.d("WEBVIEW", "got to webpage");
 		gWebView.setWebViewClient(new WebViewClient() {
@@ -69,7 +68,7 @@ public class SmartActivity extends Activity {
 			@Override
 			public void onPageFinished(WebView view, String url) {
 				super.onPageFinished(view, url);
-				if(url.startsWith("https://api.23andme")){
+				if(url.startsWith(" https://genomics-advisor.smartplatforms.org")){
 					pageDialog.dismiss();
 				}
 				if (url.startsWith(REDIRECT_URI)) {
@@ -119,7 +118,7 @@ public class SmartActivity extends Activity {
 
 				HttpClient httpclient = new DefaultHttpClient();
 				HttpPost httppost = new HttpPost(
-						"https://api.23andme.com/token/");
+						" https://genomics-advisor.smartplatforms.org:7000/auth/tokens/");
 				
 
 				try {
@@ -131,13 +130,13 @@ public class SmartActivity extends Activity {
 					nameValuePairs.add(new BasicNameValuePair(
 							"client_secret", CLIENT_SECRET));
 					nameValuePairs.add(new BasicNameValuePair(
-							"grant_type", "authorization_code"));
-					nameValuePairs.add(new BasicNameValuePair(
-							"redirect_uri", REDIRECT_URI));
+							"grant_type", "code"));
+					//nameValuePairs.add(new BasicNameValuePair(
+							//"redirect_uri", REDIRECT_URI));
 					nameValuePairs.add(new BasicNameValuePair(
 							"code", code));
-					nameValuePairs.add(new BasicNameValuePair(
-							"scope", SCOPE));
+					//nameValuePairs.add(new BasicNameValuePair(
+					//		"scope", SCOPE));
 
 					httppost.setEntity(new UrlEncodedFormEntity(
 							nameValuePairs));
@@ -223,9 +222,9 @@ public class SmartActivity extends Activity {
 		protected void onPostExecute(String result) {		
 			super.onPostExecute(result);
 			dataDialog.dismiss();
-			Intent intent = new Intent(getApplicationContext(), MusicActivity.class);
-			intent.putExtra("population_risk", population_risk);
-			intent.putExtra("individual risk", individual_risk);
+			Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+			//intent.putExtra("population_risk", population_risk);
+			//intent.putExtra("individual risk", individual_risk);
 			startActivity(intent);
 		}
 		

@@ -4,5 +4,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="ErrorPage">50dip</dimen>
+     <dimen name="frag_rounding_radius">20dp</dimen>
 
 </resources>

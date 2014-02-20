@@ -33,6 +33,8 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -50,6 +52,12 @@ import android.widget.Toast;
 import android.media.audiofx.Visualizer;
 
 import com.bcl.music23andme.R;
+import com.facebook.FacebookAuthorizationException;
+import com.facebook.FacebookOperationCanceledException;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.FacebookDialog;
 import com.leff.midi.MidiFile;
 import com.leff.midi.MidiTrack;
 import com.leff.midi.event.MidiEvent;
@@ -122,6 +130,14 @@ public class MusicActivity extends Activity {
     ProgressDialog musicDialog;
     MusicApp app;
     Utilities utils;
+    
+    private UiLifecycleHelper uiHelper;
+    private Session.StatusCallback callback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -278,11 +294,65 @@ public class MusicActivity extends Activity {
         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
    };
            
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+   @Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.actionbar, menu);
+		return true;
+	}
+   
+   private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+       if ((exception instanceof FacebookOperationCanceledException) ||
+               (exception instanceof FacebookAuthorizationException)) {
+               new AlertDialog.Builder(MusicActivity.this)
+                   .setTitle(R.string.cancelled)
+                   .setMessage(R.string.permission_not_granted)
+                   .setPositiveButton(R.string.ok, null)
+                   .show();
+       }
+   }
+
+	
+   @Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_connect:
+			Toast.makeText(this, "Connecting to 23andme", Toast.LENGTH_SHORT)
+			.show();
+			Intent connectIt= new Intent(MusicActivity.this,WebViewActivity.class);
+			startActivity(connectIt);
+			break;
+		case R.id.action_home:
+			Intent hintent = new Intent(this, MainActivity.class);
+			  hintent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			  startActivity(hintent);
+			  break;
+		case R.id.action_music:
+			Intent mintent = new Intent(this, MusicActivity.class);
+			  startActivity(mintent);
+			  break;
+		case R.id.action_share:
+			if (FacebookDialog.canPresentShareDialog(getApplicationContext(), 
+	                FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
+	    		FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(MusicActivity.this)
+	    		.setLink("https://developers.facebook.com/android")
+	    		.build();
+	    		uiHelper.trackPendingDialogCall(shareDialog.present());
+	    	}
+			break;
+		case android.R.id.home:
+			  Intent intent = new Intent(this, MainActivity.class);
+			  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			  startActivity(intent);
+			  break; 
+			
+		default:
+			break;
+		}
+		
+		return true;
+	}
+	
     
     @Override
         protected void onPause() {

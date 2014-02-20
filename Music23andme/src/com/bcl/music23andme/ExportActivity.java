@@ -18,6 +18,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 import android.os.Environment;
@@ -51,13 +53,14 @@ public class ExportActivity extends Activity {
             onSessionStateChange(session, state, exception);
         }
     };
+    
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		uiHelper = new UiLifecycleHelper(this, callback);
+		uiHelper.onCreate(savedInstanceState);
 		overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-	    uiHelper.onCreate(savedInstanceState);
 	    
 		setContentView(R.layout.activity_export);
 		extras = getIntent().getExtras();
@@ -120,6 +123,53 @@ public class ExportActivity extends Activity {
 		
 	}
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.actionbar, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_connect:
+			Toast.makeText(this, "Connecting to 23andme", Toast.LENGTH_SHORT)
+			.show();
+			Intent connectIt= new Intent(this,WebViewActivity.class);
+			startActivity(connectIt);
+			break;
+		case R.id.action_home:
+			Intent hintent = new Intent(this, MainActivity.class);
+			  hintent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			  startActivity(hintent);
+			  break;
+		case R.id.action_music:
+			Intent mintent = new Intent(this, MusicActivity.class);
+			  startActivity(mintent);
+			  break;
+		case R.id.action_share:
+			if (FacebookDialog.canPresentShareDialog(getApplicationContext(), 
+	                FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
+	    		FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(ExportActivity.this)
+	    		.setLink("https://developers.facebook.com/android")
+	    		.build();
+	    		uiHelper.trackPendingDialogCall(shareDialog.present());
+	    	}
+			break;
+		case android.R.id.home:
+			  Intent intent = new Intent(this, MainActivity.class);
+			  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			  startActivity(intent);
+			  break; 
+			
+		default:
+			break;
+		}
+		
+		return true;
+	}
+	
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if ((exception instanceof FacebookOperationCanceledException) ||
                 (exception instanceof FacebookAuthorizationException)) {
@@ -171,13 +221,6 @@ public class ExportActivity extends Activity {
 	public void onDestroy() {
 	    super.onDestroy();
 	    uiHelper.onDestroy();
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.export, menu);
-		return true;
 	}
 	
 	class ExportWav extends AsyncTask<String,Void,String>{

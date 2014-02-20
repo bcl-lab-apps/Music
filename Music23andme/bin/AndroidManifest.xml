@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bcl.music23andme"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="2"
+    android:versionName="1.1" >
 
     <uses-sdk
-        android:minSdkVersion="12"
+        android:minSdkVersion="14"
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -43,7 +43,7 @@
         <activity
             android:name="com.bcl.music23andme.WebViewActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/title_activity_web_view"
+            android:label=""
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -55,13 +55,13 @@
         <activity
             android:name="com.bcl.music23andme.ExportActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/title_activity_export"
+            android:label=""
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.bcl.music23andme.MusicActivity"
             android:configChanges="orientation"
-            android:label="@string/title_activity_welcome"
+            android:label=""
             android:screenOrientation="portrait" >
         </activity>
 
@@ -73,6 +73,10 @@
         <activity
             android:name="com.bcl.music23andme.SmartActivity"
             android:label="@string/title_activity_smart" >
+        </activity>
+        <activity
+            android:name="com.bcl.music23andme.ListActivity"
+            android:label="@string/title_activity_list" >
         </activity>
     </application>
 

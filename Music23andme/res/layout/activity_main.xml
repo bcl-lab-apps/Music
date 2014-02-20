@@ -48,5 +48,15 @@
         android:background="@drawable/gradient_button_blue" 
         android:drawableLeft="@drawable/musicicon" />
 
+    <Button
+        android:id="@+id/button_smart"
+        android:layout_width="200dip"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/playDemo"
+        android:layout_below="@+id/playDemo"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/gradient_button_blue"
+        android:drawableLeft="@drawable/image_smart"
+        android:text="Connect to SMART " />
 
 </RelativeLayout>
