@@ -17,4 +17,8 @@
          android:orderInCategory="80"
          android:showAsAction="always"
          android:title="Play music"/>
+      <item android:id="@+id/action_risk"
+         android:orderInCategory="90"
+         android:showAsAction="always"
+         android:title="Rik Genotypes"/>
 </menu>

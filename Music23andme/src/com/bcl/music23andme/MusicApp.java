@@ -27,12 +27,23 @@ public class MusicApp extends Application{
 	Hashtable<Integer, String> diseaseOrder;
 	ArrayList<String> diseaselist;
 	Hashtable<Integer, String> listOrder;
+	Hashtable<String, List<String>> SNPs=new Hashtable<String, List<String>>();
+	static String bearer_token="";
+	static String profile_id="";
 	@Override
 	public void onCreate() {
+		List<String> SNP1= Arrays.asList("rs1447295","rs6983267","rs10505483","rs1859962","rs4430796","rs10993994"
+				,"rs7127900","rs8102476","rs12621278","rs17021918","rs10486567","rs1512268");
+		List<String> SNP2=Arrays.asList("rs1061147","rs547154","rs3750847","rs2230199","rs9621532");
+		SNPs.put("Prosate Cancer", SNP1);
+		SNPs.put("Age-related Macular Degeneration", SNP2);
 		diseaselist=new ArrayList<String>();
 		diseaseOrder= new Hashtable<Integer, String>();
 		InputStream inputStream=getResources().openRawResource(R.raw.agedistrbution);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+		final String CLIENT_ID = "021772bf49aa3d0b7b5623fa926eab02";
+		final String CLIENT_SECRET = "7278d594495d28c17cc183ef3279be24";
+		
 		listOrder= new Hashtable<Integer, String>();
 		
 		try{

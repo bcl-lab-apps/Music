@@ -162,6 +162,10 @@ public class ExportActivity extends Activity {
 			  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			  startActivity(intent);
 			  break; 
+		case R.id.action_risk:
+			Intent rintent= new Intent(this, DiseaseListActivity.class);
+			startActivity(rintent);
+			break;
 			
 		default:
 			break;

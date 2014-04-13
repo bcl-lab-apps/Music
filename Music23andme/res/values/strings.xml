@@ -38,5 +38,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_smart">SmartActivity</string>
     <string name="title_activity_list">ListActivity</string>
+    <string name="title_activity_disease_list">DiseaseListActivity</string>
 
 </resources>

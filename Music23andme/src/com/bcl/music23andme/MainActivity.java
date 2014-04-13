@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
 	Button button_musicw;
 	Button button_loginfbw;
 	Button button_demo;
+	Button button_smart;
 	
 	private UiLifecycleHelper uiHelper;
 	
@@ -72,6 +73,7 @@ public class MainActivity extends Activity {
 		button_musicw.setOnClickListener(music_listener);
 		button_loginfbw = (Button)findViewById(R.id.button_loginfb);
 		button_loginfbw.setOnClickListener(loginfb_listener);
+		button_smart=(Button)findViewById(R.id.button_smart);
 		button_demo= (Button) findViewById(R.id.playDemo);
 		button_demo.setOnClickListener(new OnClickListener(){
 
@@ -80,6 +82,15 @@ public class MainActivity extends Activity {
 				Intent demoIntent= new Intent(getApplicationContext(), MusicActivity.class);
 				demoIntent.putExtra("demo", true);
 				startActivity(demoIntent);
+			}
+			
+		});
+		button_smart.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				Intent smartIntent= new Intent(getApplicationContext(), SmartActivity.class);
+				startActivity(smartIntent);
 			}
 			
 		});
@@ -152,6 +163,10 @@ public class MainActivity extends Activity {
 			  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			  startActivity(intent);
 			  break; 
+		case R.id.action_risk:
+			Intent rintent= new Intent(this, DiseaseListActivity.class);
+			startActivity(rintent);
+			break;
 			
 		default:
 			break;

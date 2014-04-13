@@ -75,8 +75,12 @@
             android:label="@string/title_activity_smart" >
         </activity>
         <activity
-            android:name="com.bcl.music23andme.ListActivity"
+            android:name="com.bcl.music23andme.SnpActivity"
             android:label="@string/title_activity_list" >
+        </activity>
+        <activity
+            android:name="com.bcl.music23andme.DiseaseListActivity"
+            android:label="@string/title_activity_disease_list" >
         </activity>
     </application>
 

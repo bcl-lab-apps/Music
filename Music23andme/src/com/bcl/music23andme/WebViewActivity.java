@@ -256,7 +256,7 @@ public class WebViewActivity extends Activity {
 						else{
 						}
 						bearer_token=bearer_tokens.get(0);
-						
+					    MusicApp.bearer_token=bearer_token;
 						HttpGet httpget = new HttpGet(
 								"https://api.23andme.com/1/names/");
 						httpget.setHeader("Authorization", "Bearer "
@@ -275,14 +275,15 @@ public class WebViewActivity extends Activity {
 						}
 						JSONObject profileObject=arrays.get(0);
 						String profileId=profileObject.getString("id");
+						MusicApp.profile_id=profileId;
 						HttpGet riskGet= new HttpGet("https://api.23andme.com/1/risks/" + profileId + "/");
 						riskGet.setHeader("Authorization", "Bearer "
 								+ bearer_token);
 						HttpResponse riskResponse = httpclient.execute(riskGet);
 						// Get the response
 						JSONObject risks= new JSONObject(EntityUtils.toString(riskResponse.getEntity()));
-						//Log.d(TAG, risks.toString());
-						JSONArray riskArray = new JSONArray(risks.getString("traits"));
+						Log.d(TAG, risks.toString());
+						JSONArray riskArray = new JSONArray(risks.getString("risks"));
 						Log.d("risk array", riskArray.toString());
 						ArrayList<JSONObject> riskList= new ArrayList<JSONObject>();
 						for(int x=0;x<riskArray.length();x++){ 

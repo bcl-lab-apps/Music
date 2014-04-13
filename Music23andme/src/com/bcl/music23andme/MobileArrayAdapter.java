@@ -29,7 +29,6 @@ public class MobileArrayAdapter extends ArrayAdapter<String> {
 		ImageView imageView = (ImageView) rowView.findViewById(R.id.logo);
 		textView.setText(values[position]);
  
-		// Change icon based on name
 		String s = values[position];
  
 		System.out.println(s);

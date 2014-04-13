@@ -157,6 +157,7 @@ public class MusicActivity extends Activity {
                 ind_string.addAll(indriskHash.values());
                 diseases.addAll(popriskHash.keySet());
                 app.valueCompare(diseases, app.diseaseOrder);
+                Log.d(TAG, "Data: "+ indriskHash.toString());
                 for(String disease:diseases){
                         individual_risk.add(Double.valueOf((String) indriskHash.get(disease)));
                         population_risk.add(Double.valueOf((String) popriskHash.get(disease)));
@@ -211,6 +212,7 @@ public class MusicActivity extends Activity {
                                         }
                                         Log.d("SCORES", Arrays.toString(risks[0].split(",")));
                                         riskscores=new double[riskString.length];
+                                        Log.d(TAG, riskString.toString());
                                         for(int r=0;r<riskString.length;r++){
                                                 riskscores[r]=Double.valueOf(riskString[r]);
                                         }

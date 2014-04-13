@@ -49,7 +49,7 @@ public class SmartActivity extends Activity {
 	final String CLIENT_ID = "2vOKNjyUwQwSyJOIF3bfBs3m68tfmt";
 	final String CLIENT_SECRET = "txrQR0UTbHzhpHUDhjVOSWNG2N89VC";
 	final String SCOPE = "basic names genomes analyses";
-	final String TAG= "WEBVIEW";
+	final String TAG= "SMARTACTIVITY";
 	Hashtable<String, String> individual_risk=new Hashtable<String, String>();
 	Hashtable<String, String> population_risk=new Hashtable<String, String>();
 	private UiLifecycleHelper uiHelper;
@@ -60,7 +60,7 @@ public class SmartActivity extends Activity {
 		gWebView = (WebView) findViewById(R.id.webView1);
 
 		pageDialog=ProgressDialog.show(SmartActivity.this, "", "connecting to SMART Genomics...");
-		gWebView.loadUrl(" https://genomics-advisor.smartplatforms.org:7000/auth/authorize?response_type=code&client_id=" + CLIENT_ID+ "&scope=read:account+read:sequence&offline=true");
+		gWebView.loadUrl("http://genomics-advisor.smartplatforms.org:7000/api/auth/authorize?response_type=code&client_id=" + CLIENT_ID+ "&scopes=read:sequence&offline=true");
 		
 		Log.d("WEBVIEW", "got to webpage");
 		gWebView.setWebViewClient(new WebViewClient() {
@@ -68,7 +68,9 @@ public class SmartActivity extends Activity {
 			@Override
 			public void onPageFinished(WebView view, String url) {
 				super.onPageFinished(view, url);
-				if(url.startsWith(" https://genomics-advisor.smartplatforms.org")){
+				if(url.startsWith("http://genomics-advisor.smartplatforms.org")){
+					Log.d(TAG, "detected url");
+					Log.d(TAG, "");
 					pageDialog.dismiss();
 				}
 				if (url.startsWith(REDIRECT_URI)) {
@@ -159,7 +161,7 @@ public class SmartActivity extends Activity {
 						else{
 						}
 						bearer_token=bearer_tokens.get(0);
-						
+						/**
 						HttpGet httpget = new HttpGet(
 								"https://api.23andme.com/1/names/");
 						httpget.setHeader("Authorization", "Bearer "
@@ -178,7 +180,7 @@ public class SmartActivity extends Activity {
 						}
 						JSONObject profileObject=arrays.get(0);
 						String profileId=profileObject.getString("id");
-						HttpGet riskGet= new HttpGet("https://api.23andme.com/1/risks/" + profileId + "/");
+						/**HttpGet riskGet= new HttpGet("https://api.23andme.com/1/risks/" + profileId + "/");
 						riskGet.setHeader("Authorization", "Bearer "
 								+ bearer_token);
 						HttpResponse riskResponse = httpclient.execute(riskGet);
@@ -193,6 +195,7 @@ public class SmartActivity extends Activity {
 							population_risk.put(risk.getString("description"), risk.getString("population_risk"));
 						}	
 						Log.d(TAG, "individual_risk: " + individual_risk.toString());
+						**/
 					}
 
 				} catch (ClientProtocolException e) {
@@ -222,7 +225,7 @@ public class SmartActivity extends Activity {
 		protected void onPostExecute(String result) {		
 			super.onPostExecute(result);
 			dataDialog.dismiss();
-			Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+			Intent intent = new Intent(getApplicationContext(), DiseaseListActivity.class);
 			//intent.putExtra("population_risk", population_risk);
 			//intent.putExtra("individual risk", individual_risk);
 			startActivity(intent);
